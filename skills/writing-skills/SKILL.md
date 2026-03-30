@@ -7,17 +7,17 @@ description: Use when creating new skills, editing existing skills, or verifying
 
 ## Overview
 
-**Writing skills IS Test-Driven Development applied to process documentation.**
+**Writing skills should be validated in proportion to the change.**
 
 **Personal skills live in agent-specific directories (`~/.claude/skills` for Claude Code, `~/.agents/skills/` for Codex)** 
 
-You write test cases (pressure scenarios with subagents), watch them fail (baseline behavior), write the skill (documentation), watch tests pass (agents comply), and refactor (close loopholes).
+For behavior-changing or discipline-enforcing skills, use pressure scenarios to watch the old behavior fail, update the skill, then verify the new behavior holds. For wording cleanups, examples, links, or other documentation-only edits, do lighter verification instead of forcing a fake TDD loop.
 
 **Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing.
 
-**REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill. That skill defines the fundamental RED-GREEN-REFACTOR cycle. This skill adapts TDD to documentation.
+**Helpful background:** superpowers:test-driven-development explains the red-green-refactor mental model, but not every skill edit needs the full TDD ritual.
 
-**Official guidance:** For Anthropic's official skill authoring best practices, see anthropic-best-practices.md. This document provides additional patterns and guidelines that complement the TDD-focused approach in this skill.
+**Official guidance:** For Anthropic's official skill authoring best practices, see anthropic-best-practices.md. This document provides additional patterns and guidelines that complement the evidence-driven approach in this skill.
 
 ## What is a Skill?
 
@@ -27,7 +27,7 @@ A **skill** is a reference guide for proven techniques, patterns, or tools. Skil
 
 **Skills are NOT:** Narratives about how you solved a problem once
 
-## TDD Mapping for Skills
+## Behavior-Validation Mapping for Skills
 
 | TDD Concept | Skill Creation |
 |-------------|----------------|
@@ -42,7 +42,7 @@ A **skill** is a reference guide for proven techniques, patterns, or tools. Skil
 | **Watch it pass** | Verify agent now complies |
 | **Refactor cycle** | Find new rationalizations → plug → re-verify |
 
-The entire skill creation process follows RED-GREEN-REFACTOR.
+Use the full RED-GREEN-REFACTOR loop when the skill changes agent decisions, closes loopholes, or adds discipline. Do not force that loop onto typo fixes, wording cleanups, or reference-only edits.
 
 ## When to Create a Skill
 
@@ -168,7 +168,7 @@ description: Use for TDD - write test first, watch it fail, write minimal code, 
 description: Use when executing implementation plans with independent tasks in the current session
 
 # ✅ GOOD: Triggering conditions only
-description: Use when implementing any feature or bugfix, before writing implementation code
+description: Use when changing behavior through a clear automated test seam, such as a bug fix or feature that can be driven from a failing test before implementation
 ```
 
 **Content:**
@@ -371,26 +371,25 @@ pptx/
 ```
 When: Reference material too large for inline
 
-## The Iron Law (Same as TDD)
+## Validation Depth
 
 ```
-NO SKILL WITHOUT A FAILING TEST FIRST
+MATCH THE VALIDATION TO THE CHANGE
 ```
 
-This applies to NEW skills AND EDITS to existing skills.
+**Use full baseline + pressure testing for:**
+- New skills
+- Edits that change when a skill triggers
+- Edits that change agent decision-making, constraints, or required workflow
+- Discipline-enforcing skills where agents may rationalize around the rule
 
-Write skill before testing? Delete it. Start over.
-Edit skill without testing? Same violation.
+**Use lighter verification for:**
+- Typos, wording cleanups, and link fixes
+- Documentation-only additions that do not change agent behavior
+- Search optimization, examples, or formatting updates
+- Reference updates where correctness comes from checking the text and references
 
-**No exceptions:**
-- Not for "simple additions"
-- Not for "just adding a section"
-- Not for "documentation updates"
-- Don't keep untested changes as "reference"
-- Don't "adapt" while running tests
-- Delete means delete
-
-**REQUIRED BACKGROUND:** The superpowers:test-driven-development skill explains why this matters. Same principles apply to documentation.
+When behavior changes without validation, you're guessing. When behavior does not change, don't pretend it needs a failing test first.
 
 ## Testing All Skill Types
 
@@ -527,12 +526,12 @@ Make it easy for agents to self-check when rationalizing:
 Add to description: symptoms of when you're ABOUT to violate the rule:
 
 ```yaml
-description: use when implementing any feature or bugfix, before writing implementation code
+description: use when changing behavior through a clear automated test seam, such as a bug fix or feature that can be driven from a failing test before implementation
 ```
 
-## RED-GREEN-REFACTOR for Skills
+## RED-GREEN-REFACTOR for Behavior-Changing Skills
 
-Follow the TDD cycle:
+Use this cycle when the skill changes behavior and needs to be pressure-tested:
 
 ### RED: Write Failing Test (Baseline)
 
@@ -582,7 +581,7 @@ helper1, helper2, step3, pattern4
 
 ## STOP: Before Moving to Next Skill
 
-**After writing ANY skill, you MUST STOP and complete the deployment process.**
+**After writing any new skill or materially changing a skill's behavior, you MUST STOP and complete the deployment process.**
 
 **Do NOT:**
 - Create multiple skills in batch without testing each
@@ -591,18 +590,18 @@ helper1, helper2, step3, pattern4
 
 **The deployment checklist below is MANDATORY for EACH skill.**
 
-Deploying untested skills = deploying untested code. It's a violation of quality standards.
+Deploying unvalidated behavior changes is a quality problem. Documentation-only edits still need review, but not every edit needs a pressure-test campaign.
 
-## Skill Creation Checklist (TDD Adapted)
+## Skill Creation Checklist
 
 **IMPORTANT: Use TodoWrite to create todos for EACH checklist item below.**
 
-**RED Phase - Write Failing Test:**
+**For behavior-changing skills or edits:**
 - [ ] Create pressure scenarios (3+ combined pressures for discipline skills)
 - [ ] Run scenarios WITHOUT skill - document baseline behavior verbatim
 - [ ] Identify patterns in rationalizations/failures
 
-**GREEN Phase - Write Minimal Skill:**
+**Write the skill update:**
 - [ ] Name uses only letters, numbers, hyphens (no parentheses/special chars)
 - [ ] YAML frontmatter with required `name` and `description` fields (max 1024 chars; see [spec](https://agentskills.io/specification))
 - [ ] Description starts with "Use when..." and includes specific triggers/symptoms
@@ -612,21 +611,23 @@ Deploying untested skills = deploying untested code. It's a violation of quality
 - [ ] Address specific baseline failures identified in RED
 - [ ] Code inline OR link to separate file
 - [ ] One excellent example (not multi-language)
-- [ ] Run scenarios WITH skill - verify agents now comply
+- [ ] Run scenarios WITH skill - verify agents now comply, if behavior changed
 
-**REFACTOR Phase - Close Loopholes:**
+**Close loopholes when behavior changed:**
 - [ ] Identify NEW rationalizations from testing
 - [ ] Add explicit counters (if discipline skill)
 - [ ] Build rationalization table from all test iterations
 - [ ] Create red flags list
 - [ ] Re-test until bulletproof
 
-**Quality Checks:**
+**Quality checks for every skill edit:**
 - [ ] Small flowchart only if decision non-obvious
 - [ ] Quick reference table
 - [ ] Common mistakes section
 - [ ] No narrative storytelling
 - [ ] Supporting files only for tools or heavy reference
+- [ ] Re-read the final text for contradictions or overbroad trigger language
+- [ ] Verify links, references, and examples still match the skill
 
 **Deployment:**
 - [ ] Commit skill to git and push to your fork (if configured)
@@ -646,10 +647,7 @@ How future Claude finds your skill:
 
 ## The Bottom Line
 
-**Creating skills IS TDD for process documentation.**
+Use validation that matches the kind of skill change you're making.
 
-Same Iron Law: No skill without failing test first.
-Same cycle: RED (baseline) → GREEN (write skill) → REFACTOR (close loopholes).
-Same benefits: Better quality, fewer surprises, bulletproof results.
-
-If you follow TDD for code, follow it for skills. It's the same discipline applied to documentation.
+For behavior-changing skills, RED (baseline) → GREEN (update skill) → REFACTOR (close loopholes) is the right standard.
+For documentation-only or reference-only edits, careful review and reference verification are usually the right standard.

@@ -11,6 +11,8 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 
 **Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
 
+Testing strategy comes from the plan: use strict TDD for tasks with a clear failing-test seam, and use lighter verification for docs, mechanical edits, or structural work that is not meaningfully test-first.
+
 ## When to Use
 
 ```dot
@@ -202,7 +204,7 @@ Done!
 ## Advantages
 
 **vs. Manual execution:**
-- Subagents follow TDD naturally
+- Subagents can follow TDD cleanly when the task calls for it
 - Fresh context per task (no confusion)
 - Parallel-safe (subagents don't interfere)
 - Subagent can ask questions (before AND during work)
@@ -271,7 +273,7 @@ Done!
 - **superpowers:finishing-a-development-branch** - Complete development after all tasks
 
 **Subagents should use:**
-- **superpowers:test-driven-development** - Subagents follow TDD for each task
+- **superpowers:test-driven-development** - Use when the task has a clear automated behavior seam and the plan calls for red-green-refactor
 
 **Alternative workflow:**
 - **superpowers:executing-plans** - Use for parallel session instead of same-session execution

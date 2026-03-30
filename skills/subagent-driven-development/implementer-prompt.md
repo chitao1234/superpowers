@@ -30,7 +30,7 @@ Task tool (general-purpose):
 
     Once you're clear on requirements:
     1. Implement exactly what the task specifies
-    2. Write tests (following TDD if task says to)
+    2. Write or update the verification the task calls for; use TDD only when the task provides a real failing-test seam
     3. Verify implementation works
     4. Commit your work
     5. Self-review (see below)
@@ -92,7 +92,9 @@ Task tool (general-purpose):
 
     **Testing:**
     - Do tests actually verify behavior (not just mock behavior)?
-    - Did I follow TDD if required?
+    - Did I follow the task's intended testing approach?
+    - If TDD was required, did I actually do red-green-refactor?
+    - If TDD did not fit, did I choose sensible verification and explain it?
     - Are tests comprehensive?
 
     If you find issues during self-review, fix them now before reporting.

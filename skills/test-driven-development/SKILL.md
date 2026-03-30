@@ -1,13 +1,13 @@
 ---
 name: test-driven-development
-description: Use when implementing any feature or bugfix, before writing implementation code
+description: Use when changing behavior through a clear automated test seam, such as a bug fix or feature that can be driven from a failing test before implementation
 ---
 
 # Test-Driven Development (TDD)
 
 ## Overview
 
-Write the test first. Watch it fail. Write minimal code to pass.
+Use this skill when the task has a real automated behavior seam. Write the test first, watch it fail, then write minimal code to pass.
 
 **Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
 
@@ -15,28 +15,35 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 ## When to Use
 
-**Always:**
-- New features
-- Bug fixes
-- Refactoring
-- Behavior changes
+**Use this skill when all of these are true:**
+- You're changing observable behavior, not just reshaping files or prose
+- You can name a concrete automated test to write first
+- The test can fail for the missing behavior, not because the code is too coupled to reach cleanly
+- The task benefits from red-green-refactor feedback, not just post-change verification
 
-**Exceptions (ask your human partner):**
-- Throwaway prototypes
-- Generated code
-- Configuration files
+**Do not use this skill for:**
+- Documentation-only changes
+- Formatting, renames, file moves, or other mechanical edits with no behavior change
+- Structural refactors where there is no reliable test seam yet and creating one is a separate task
+- Exploratory spikes, throwaway prototypes, or generated output
+- Configuration churn where a failing behavior test is not the right tool
 
-Thinking "skip TDD just this once"? Stop. That's rationalization.
+**If TDD doesn't fit yet:**
+- Pick the right verification for the task instead of forcing fake red-green cycles
+- For risky refactors, add characterization or integration coverage where practical
+- If you need a seam first, make "create a seam" its own task or ask your human partner how to stage the work
+
+Thinking "I'll pretend this is TDD even though I can't write a real failing test"? Stop. That's rationalization.
 
 ## The Iron Law
 
 ```
-NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
+WHEN THIS SKILL APPLIES: NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
 ```
 
-Write code before the test? Delete it. Start over.
+Once you decide the task belongs in TDD, write code before the test? Delete it. Start over.
 
-**No exceptions:**
+**No exceptions inside the TDD path:**
 - Don't keep it as "reference"
 - Don't "adapt" it while writing tests
 - Don't look at it
@@ -263,14 +270,17 @@ Tests-first force edge case discovery before implementing. Tests-after verify yo
 | "Already manually tested" | Ad-hoc ≠ systematic. No record, can't re-run. |
 | "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping unverified code is technical debt. |
 | "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
-| "Need to explore first" | Fine. Throw away exploration, start with TDD. |
+| "Need to explore first" | Fine. Do a throwaway spike, then restart once you have a real test seam. |
+| "No clear test seam yet, but I'll force TDD anyway" | Fake tests are noise. Create a seam first or use a different workflow. |
 | "Test hard = design unclear" | Listen to test. Hard to test = hard to use. |
 | "TDD will slow me down" | TDD faster than debugging. Pragmatic = test-first. |
 | "Manual test faster" | Manual doesn't prove edge cases. You'll re-test every change. |
-| "Existing code has no tests" | You're improving it. Add tests for existing code. |
+| "Existing code has no tests" | If you can add a characterization or behavior test, do that. If not, stage the seam before claiming TDD. |
 
 ## Red Flags - STOP and Start Over
 
+- Docs-only or mechanical task incorrectly framed as TDD
+- No clear failing-test seam, but proceeding anyway
 - Code before test
 - Test after implementation
 - Test passes immediately
@@ -285,7 +295,7 @@ Tests-first force edge case discovery before implementing. Tests-after verify yo
 - "TDD is dogmatic, I'm being pragmatic"
 - "This is different because..."
 
-**All of these mean: Delete code. Start over with TDD.**
+**If you chose TDD, these mean: Delete code. Start over with TDD.**
 
 ## Example: Bug Fix
 
@@ -326,9 +336,10 @@ Extract validation for multiple fields if needed.
 
 ## Verification Checklist
 
-Before marking work complete:
+Use this checklist only when the task actually belonged in TDD:
 
-- [ ] Every new function/method has a test
+- [ ] Task had a clear automated behavior seam
+- [ ] Every new behavior covered by this change has a test
 - [ ] Watched each test fail before implementing
 - [ ] Each test failed for expected reason (feature missing, not typo)
 - [ ] Wrote minimal code to pass each test
@@ -337,7 +348,7 @@ Before marking work complete:
 - [ ] Tests use real code (mocks only if unavoidable)
 - [ ] Edge cases and errors covered
 
-Can't check all boxes? You skipped TDD. Start over.
+Can't check all boxes? Either you skipped TDD or this wasn't a TDD task. Be honest about which.
 
 ## When Stuck
 
@@ -350,9 +361,9 @@ Can't check all boxes? You skipped TDD. Start over.
 
 ## Debugging Integration
 
-Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix and prevents regression.
+Bug found and you can reproduce it through a reliable automated test? Write the failing test first and follow the TDD cycle. The test proves the fix and prevents regression.
 
-Never fix bugs without a test.
+If you can't reproduce the bug in a reliable automated test yet, use superpowers:systematic-debugging first and come back to TDD once you have a seam.
 
 ## Testing Anti-Patterns
 
@@ -364,8 +375,11 @@ When adding mocks or test utilities, read @testing-anti-patterns.md to avoid com
 ## Final Rule
 
 ```
-Production code → test exists and failed first
-Otherwise → not TDD
+When task has a clear behavior seam:
+production code → test exists and failed first
+
+When task does not:
+choose a different verification strategy
 ```
 
 No exceptions without your human partner's permission.

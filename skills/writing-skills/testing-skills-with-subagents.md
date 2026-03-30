@@ -4,28 +4,29 @@
 
 ## Overview
 
-**Testing skills is just TDD applied to process documentation.**
+**This reference is for behavior-changing skills that need pressure testing, not every documentation edit.**
 
 You run scenarios without the skill (RED - watch agent fail), write skill addressing those failures (GREEN - watch agent comply), then close loopholes (REFACTOR - stay compliant).
 
 **Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill prevents the right failures.
 
-**REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill. That skill defines the fundamental RED-GREEN-REFACTOR cycle. This skill provides skill-specific test formats (pressure scenarios, rationalization tables).
+**Helpful background:** superpowers:test-driven-development explains the RED-GREEN-REFACTOR mental model, but use this reference only when the skill change actually needs that level of validation.
 
 **Complete worked example:** See examples/CLAUDE_MD_TESTING.md for a full test campaign testing CLAUDE.md documentation variants.
 
 ## When to Use
 
-Test skills that:
+Use this reference for skills that:
 - Enforce discipline (TDD, testing requirements)
 - Have compliance costs (time, effort, rework)
 - Could be rationalized away ("just this once")
 - Contradict immediate goals (speed over quality)
 
-Don't test:
+Do not use this reference for:
 - Pure reference skills (API docs, syntax guides)
 - Skills without rules to violate
 - Skills agents have no incentive to bypass
+- Simple wording, link, or formatting edits that do not change behavior
 
 ## TDD Mapping for Skill Testing
 

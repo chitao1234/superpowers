@@ -7,7 +7,7 @@ description: Use when you have a spec or requirements for a multi-step task, bef
 
 ## Overview
 
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. Use TDD where the task has a clear behavior seam. Frequent commits.
 
 Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
 
@@ -36,10 +36,11 @@ This structure informs the task decomposition. Each task should produce self-con
 ## Bite-Sized Task Granularity
 
 **Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
+- "Write the failing test" - step, when the task supports TDD
+- "Run it to make sure it fails" - step, when the task supports TDD
+- "Implement the minimal code to make the test pass" - step, when the task supports TDD
+- "Run the focused verification for the task" - step
+- "Update docs / rename files / perform structural change" - step, when the task is not a TDD task
 - "Commit" - step
 
 ## Plan Document Header
@@ -68,32 +69,32 @@ This structure informs the task decomposition. Each task should produce self-con
 **Files:**
 - Create: `exact/path/to/file.py`
 - Modify: `exact/path/to/existing.py:123-145`
-- Test: `tests/exact/path/to/test.py`
+- Test/Verify: `tests/exact/path/to/test.py` or `command / output / rendered artifact to inspect`
 
-- [ ] **Step 1: Write the failing test**
+**Testing approach:** [`TDD` | `characterization/integration test` | `existing tests + targeted verification` | `no new tests needed`]
+Reason: [Why this level of testing fits this task]
 
-```python
-def test_specific_behavior():
-    result = function(input)
-    assert result == expected
-```
-
-- [ ] **Step 2: Run test to verify it fails**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: FAIL with "function not defined"
-
-- [ ] **Step 3: Write minimal implementation**
+- [ ] **Step 1: [Write the failing test OR capture current behavior OR make the docs/structural change]**
 
 ```python
-def function(input):
-    return expected
+# Fill with the real code or commands for this step.
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [ ] **Step 2: [Run the focused verification for this step]**
 
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: PASS
+Run: `exact command`
+Expected: [FAIL first for TDD, or PASS / diff / lint / build output as appropriate]
+
+- [ ] **Step 3: [Implement the change]**
+
+```python
+# Fill with the real code or commands for this step.
+```
+
+- [ ] **Step 4: [Run the post-change verification]**
+
+Run: `exact command`
+Expected: [PASS / clean diff / successful build / expected rendered output]
 
 - [ ] **Step 5: Commit**
 
@@ -109,6 +110,7 @@ Every step must contain the actual content an engineer needs. These are **plan f
 - "TBD", "TODO", "implement later", "fill in details"
 - "Add appropriate error handling" / "add validation" / "handle edge cases"
 - "Write tests for the above" (without actual test code)
+- "Use TDD" (without stating why TDD fits this specific task)
 - "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
 - Steps that describe what to do without showing how (code blocks required for code steps)
 - References to types, functions, or methods not defined in any task
@@ -117,7 +119,8 @@ Every step must contain the actual content an engineer needs. These are **plan f
 - Exact file paths always
 - Complete code in every step — if a step changes code, show the code
 - Exact commands with expected output
-- DRY, YAGNI, TDD, frequent commits
+- State the testing approach per task instead of assuming TDD everywhere
+- DRY, YAGNI, task-appropriate testing, frequent commits
 
 ## Self-Review
 
