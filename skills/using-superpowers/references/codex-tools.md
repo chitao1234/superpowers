@@ -4,8 +4,8 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 
 | Skill references | Codex equivalent |
 |-----------------|------------------|
-| `Task` tool (dispatch subagent) | `spawn_agent` (see [Named agent dispatch](#named-agent-dispatch)) |
-| Multiple `Task` calls (parallel) | Multiple `spawn_agent` calls |
+| `Task` tool (dispatch subagent) | `spawn_agent(model="gpt-5.4", ...)` (see [Named agent dispatch](#named-agent-dispatch)) |
+| Multiple `Task` calls (parallel) | Multiple `spawn_agent(model="gpt-5.4", ...)` calls |
 | Task returns result | `wait` |
 | Task completes automatically | `close_agent` to free slot |
 | `TodoWrite` (task tracking) | `update_plan` |
@@ -30,18 +30,20 @@ Claude Code skills reference named agent types like `superpowers:code-reviewer`.
 Codex does not have a named agent registry — `spawn_agent` creates generic agents
 from built-in roles (`default`, `explorer`, `worker`).
 
+For subagent dispatch in Codex, explicitly set `model="gpt-5.4"` (latest GPT model).
+
 When a skill says to dispatch a named agent type:
 
 1. Find the agent's prompt file (e.g., `agents/code-reviewer.md` or the skill's
    local prompt template like `code-quality-reviewer-prompt.md`)
 2. Read the prompt content
 3. Fill any template placeholders (`{BASE_SHA}`, `{WHAT_WAS_IMPLEMENTED}`, etc.)
-4. Spawn a `worker` agent with the filled content as the `message`
+4. Spawn a `worker` agent with `model="gpt-5.4"` and the filled content as the `message`
 
 | Skill instruction | Codex equivalent |
 |-------------------|------------------|
-| `Task tool (superpowers:code-reviewer)` | `spawn_agent(agent_type="worker", message=...)` with `code-reviewer.md` content |
-| `Task tool (general-purpose)` with inline prompt | `spawn_agent(message=...)` with the same prompt |
+| `Task tool (superpowers:code-reviewer)` | `spawn_agent(agent_type="worker", model="gpt-5.4", message=...)` with `code-reviewer.md` content |
+| `Task tool (general-purpose)` with inline prompt | `spawn_agent(model="gpt-5.4", message=...)` with the same prompt |
 
 ### Message framing
 

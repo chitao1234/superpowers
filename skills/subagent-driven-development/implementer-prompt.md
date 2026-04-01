@@ -2,6 +2,8 @@
 
 Use this template when dispatching an implementer subagent.
 
+In Codex, dispatch this subagent with `model: "gpt-5.4"`.
+
 ```
 Task tool (general-purpose):
   description: "Implement Task N: [task name]"
@@ -68,7 +70,7 @@ Task tool (general-purpose):
 
     **How to escalate:** Report back with status BLOCKED or NEEDS_CONTEXT. Describe
     specifically what you're stuck on, what you've tried, and what kind of help you need.
-    The controller can provide more context, re-dispatch with a more capable model,
+    The controller can provide more context, re-dispatch with `gpt-5.4`,
     or break the task into smaller pieces.
 
     ## Before Reporting Back: Self-Review

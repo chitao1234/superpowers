@@ -13,6 +13,8 @@ When you have multiple unrelated failures (different test files, different subsy
 
 **Core principle:** Dispatch one agent per independent problem domain. Let them work concurrently.
 
+**Codex requirement:** Explicitly set `model: "gpt-5.4"` for every dispatched subagent. This is the required latest GPT model for these workflows.
+
 ## When to Use
 
 ```dot
@@ -71,6 +73,11 @@ Task("Fix agent-tool-abort.test.ts failures")
 Task("Fix batch-completion-behavior.test.ts failures")
 Task("Fix tool-approval-race-conditions.test.ts failures")
 // All three run concurrently
+
+// In Codex
+spawn_agent({ model: "gpt-5.4", message: "Fix agent-tool-abort.test.ts failures" })
+spawn_agent({ model: "gpt-5.4", message: "Fix batch-completion-behavior.test.ts failures" })
+spawn_agent({ model: "gpt-5.4", message: "Fix tool-approval-race-conditions.test.ts failures" })
 ```
 
 ### 4. Review and Integrate

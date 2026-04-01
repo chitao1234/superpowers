@@ -2,6 +2,8 @@
 
 Use this template when dispatching a plan document reviewer subagent.
 
+In Codex, dispatch this subagent with `model: "gpt-5.4"`.
+
 **Purpose:** Verify the plan is complete, matches the spec, and has proper task decomposition.
 
 **Dispatch after:** The complete plan is written.

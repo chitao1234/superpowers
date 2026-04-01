@@ -86,20 +86,17 @@ digraph process {
 }
 ```
 
-## Model Selection
+## Model Requirement
 
-Use the least powerful model that can handle each role to conserve cost and increase speed.
+When dispatching any subagent for this workflow in Codex, explicitly set the model name to `gpt-5.4` (latest GPT model).
 
-**Mechanical implementation tasks** (isolated functions, clear specs, 1-2 files): use a fast, cheap model. Most implementation tasks are mechanical when the plan is well-specified.
+This applies to:
+- implementer subagents
+- spec reviewer subagents
+- code quality reviewer subagents
+- the final code reviewer subagent
 
-**Integration and judgment tasks** (multi-file coordination, pattern matching, debugging): use a standard model.
-
-**Architecture, design, and review tasks**: use the most capable available model.
-
-**Task complexity signals:**
-- Touches 1-2 files with a complete spec → cheap model
-- Touches multiple files with integration concerns → standard model
-- Requires design judgment or broad codebase understanding → most capable model
+Do not leave model selection implicit. Use the literal model string `gpt-5.4` in each `spawn_agent(...)` call so the workflow is consistent and reproducible.
 
 ## Handling Implementer Status
 
@@ -113,7 +110,7 @@ Implementer subagents report one of four statuses. Handle each appropriately:
 
 **BLOCKED:** The implementer cannot complete the task. Assess the blocker:
 1. If it's a context problem, provide more context and re-dispatch with the same model
-2. If the task requires more reasoning, re-dispatch with a more capable model
+2. If the task requires more reasoning, keep using `gpt-5.4` and provide better context or break the task down further
 3. If the task is too large, break it into smaller pieces
 4. If the plan itself is wrong, escalate to the human
 

@@ -2,6 +2,8 @@
 
 Use this template when dispatching a code quality reviewer subagent.
 
+In Codex, dispatch this subagent with `model: "gpt-5.4"`.
+
 **Purpose:** Verify implementation is well-built (clean, tested, maintainable)
 
 **Only dispatch after spec compliance review passes.**

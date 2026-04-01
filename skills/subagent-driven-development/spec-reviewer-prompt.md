@@ -2,6 +2,8 @@
 
 Use this template when dispatching a spec compliance reviewer subagent.
 
+In Codex, dispatch this subagent with `model: "gpt-5.4"`.
+
 **Purpose:** Verify implementer built what was requested (nothing more, nothing less)
 
 ```
