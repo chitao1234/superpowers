@@ -63,7 +63,7 @@ digraph process {
     "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
     "More tasks remain?" [shape=diamond];
     "Dispatch final code reviewer subagent for entire implementation" [shape=box];
-    "Use superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
+    "Report implementation complete to human partner" [shape=box style=filled fillcolor=lightgreen];
 
     "Read plan, extract all tasks with full text, note context, create TodoWrite" -> "Dispatch implementer subagent (./implementer-prompt.md)";
     "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
@@ -82,7 +82,7 @@ digraph process {
     "Mark task complete in TodoWrite" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
     "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
-    "Dispatch final code reviewer subagent for entire implementation" -> "Use superpowers:finishing-a-development-branch";
+    "Dispatch final code reviewer subagent for entire implementation" -> "Report implementation complete to human partner";
 }
 ```
 
@@ -193,9 +193,9 @@ Code reviewer: ✅ Approved
 
 [After all tasks]
 [Dispatch final code-reviewer]
-Final reviewer: All requirements met, ready to merge
+Final reviewer: All requirements met
 
-Done!
+[Report implementation complete, summarize verification, leave branch/worktree state unchanged]
 ```
 
 ## Advantages
@@ -267,7 +267,6 @@ Done!
 - **superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
 - **superpowers:writing-plans** - Creates the plan this skill executes
 - **superpowers:requesting-code-review** - Code review template for reviewer subagents
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
 
 **Subagents should use:**
 - **superpowers:test-driven-development** - Use when the task has a clear automated behavior seam and the plan calls for red-green-refactor

@@ -214,5 +214,4 @@ Ready to implement auth feature
 - **executing-plans** - REQUIRED before executing any tasks
 - Any skill needing isolated workspace
 
-**Pairs with:**
-- **finishing-a-development-branch** - REQUIRED for cleanup after work complete
+Cleanup after implementation is handled by the invoking workflow or user.

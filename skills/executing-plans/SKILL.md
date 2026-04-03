@@ -32,9 +32,9 @@ For each task:
 ### Step 3: Complete Development
 
 After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
+- Report implementation complete
+- Summarize the verification that passed
+- Leave branch and worktree state unchanged unless the user explicitly asks for cleanup or integration work
 
 ## When to Stop and Ask for Help
 
@@ -67,4 +67,3 @@ After all tasks complete and verified:
 **Required workflow skills:**
 - **superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
 - **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
