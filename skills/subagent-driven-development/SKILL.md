@@ -13,6 +13,8 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 
 Testing strategy comes from the plan: use strict TDD for tasks with a clear failing-test seam, and use lighter verification for docs, mechanical edits, or structural work that is not meaningfully test-first.
 
+This is a first-class execution path. Use it when the user chooses subagent-driven execution, or when they have already shown a strong preference for it. Keep using it unless the user explicitly asks to switch to `superpowers:executing-plans`.
+
 ## When to Use
 
 ```dot

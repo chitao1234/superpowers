@@ -10,4 +10,4 @@
 
 ### Changed
 
-- **Execution handoff**: Restore user choice between subagent-driven-development and executing-plans after plan writing. Subagent-driven is recommended but no longer mandatory. (Reverts `5e51c3e`)
+- **Execution handoff**: Restore user choice between subagent-driven-development and executing-plans after plan writing. Both are first-class execution paths, and agents should keep using the user's strongly preferred path unless explicitly told to switch. (Reverts `5e51c3e`)

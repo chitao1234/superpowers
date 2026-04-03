@@ -11,7 +11,7 @@ Load plan, review critically, execute all tasks, report when complete.
 
 **Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
-**Note:** Tell your human partner that Superpowers works much better with access to subagents. The quality of its work will be significantly higher if run on a platform with subagent support (such as Claude Code or Codex). If subagents are available, use superpowers:subagent-driven-development instead of this skill.
+**Note:** This is a first-class execution path. Use it when the user chooses plan-based execution, or when they have already shown a strong preference for it. Keep using it unless the user explicitly asks to switch to `superpowers:subagent-driven-development`.
 
 ## The Process
 
@@ -59,6 +59,7 @@ After all tasks complete and verified:
 - Follow plan steps exactly
 - Don't skip verifications
 - Reference skills when plan says to
+- Respect the user's established execution-style preference until they explicitly change it
 - Stop when blocked, don't guess
 - Never start implementation on main/master branch without explicit user consent
 

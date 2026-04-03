@@ -36,7 +36,7 @@ The subagent review loop (dispatching a fresh agent to review plans/specs) doubl
 
 ### Changed
 
-- **Execution handoff** — restore user choice between subagent-driven and inline execution after plan writing. Subagent-driven is recommended but no longer mandatory.
+- **Execution handoff** — restore user choice between subagent-driven and plan-based execution after plan writing. Both are first-class options, and agents should keep using the user's strongly preferred path unless explicitly told to switch.
 
 ## v5.0.4 (2026-03-16)
 
