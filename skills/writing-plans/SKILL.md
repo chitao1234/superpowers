@@ -17,10 +17,28 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
+- Follow the repo's established tracking policy for specs/plans rather than assuming every plan should be committed
 
 ## Scope Check
 
 If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
+
+## Spec and Plan Tracking Policy
+
+Before forcing a new plan into git, inspect the repo's existing convention:
+
+```bash
+git check-ignore -v docs/superpowers/plans docs/superpowers/plans/<filename> docs/superpowers/specs docs/superpowers/specs/<related-spec>
+git ls-files 'docs/superpowers/specs/*' 'docs/superpowers/plans/*'
+```
+
+Apply these rules:
+
+- If the repo already has several tracked specs/plans in these folders (for example, 3 or more combined), treat that as an established convention and continue checking new plans into git.
+- Otherwise, if `docs/superpowers/plans/` or the target plan path is explicitly ignored by the repo, write the plan locally but do **not** force it into git.
+- If this is a new or unclear repo with no established convention, ask the user: "Do you want these planning artifacts kept only locally or checked into git?"
+- If the user already answered that question during brainstorming, reuse that preference here instead of asking again.
+- Treat the user's answer as applying to both specs and plans in this repo unless they explicitly change it.
 
 ## File Structure
 
@@ -142,7 +160,19 @@ If the user has already expressed a strong preference for one execution style, d
 
 Otherwise say:
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
+If the plan was checked into git, say:
+
+**"Plan complete and saved to `docs/superpowers/plans/<filename>.md` and checked into git. Two execution options:**
+
+**1. Subagent-Driven Execution** - I dispatch a fresh subagent per task, with review between tasks
+
+**2. Plan-Based Execution** - I execute the plan with superpowers:executing-plans, following the written steps directly
+
+**If you strongly prefer one of these styles, I'll keep using that style unless you explicitly tell me to switch. Which approach?"**
+
+If the plan was kept local-only, say:
+
+**"Plan complete and saved to `docs/superpowers/plans/<filename>.md` locally. Two execution options:**
 
 **1. Subagent-Driven Execution** - I dispatch a fresh subagent per task, with review between tasks
 

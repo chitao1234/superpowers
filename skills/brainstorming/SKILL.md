@@ -26,7 +26,7 @@ You MUST create a task for each of these items and complete them in order:
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation
 5. **Present design** — in sections scaled to their complexity, get user approval after each section
-6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
+6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and decide whether it should stay local-only or be checked into git based on repo policy and user preference
 7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
 8. **User reviews written spec** — ask user to review the spec file before proceeding
 9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
@@ -111,7 +111,28 @@ digraph brainstorming {
 - Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
   - (User preferences for spec location override this default)
 - Use elements-of-style:writing-clearly-and-concisely skill if available
-- Commit the design document to git
+- Decide whether to keep the spec local-only or check it into git before forcing any `git add` / `git commit`
+
+**Spec and Plan Tracking Policy:**
+
+Before forcing the spec into git, inspect the repo's existing convention:
+
+1. Check whether the target path is explicitly ignored by the repo.
+2. Check whether the repo already has an established convention of tracking specs and plans under `docs/superpowers/specs/` and `docs/superpowers/plans/`.
+
+Useful commands:
+
+```bash
+git check-ignore -v docs/superpowers/specs docs/superpowers/specs/<filename> docs/superpowers/plans docs/superpowers/plans/<filename>
+git ls-files 'docs/superpowers/specs/*' 'docs/superpowers/plans/*'
+```
+
+Apply these rules:
+
+- If the repo already has several tracked specs/plans in these folders (for example, 3 or more combined), treat that as an established convention and continue checking new specs/plans into git.
+- Otherwise, if `docs/superpowers/specs/` or the target spec path is explicitly ignored by the repo, write the spec locally but do **not** force it into git.
+- If this is a new or unclear repo with no established convention, ask the user: "Do you want these planning artifacts kept only locally or checked into git?"
+- Treat the user's answer as applying to both the current spec and the follow-on plan unless they explicitly change it later.
 
 **Spec Self-Review:**
 After writing the spec document, look at it with fresh eyes:
@@ -126,7 +147,13 @@ Fix any issues inline. No need to re-review — just fix and move on.
 **User Review Gate:**
 After the spec review loop passes, ask the user to review the written spec before proceeding:
 
+If the spec was checked into git:
+
 > "Spec written and committed to `<path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
+
+If the spec was kept local-only:
+
+> "Spec written to `<path>` and kept local-only for now. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
 
 Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
 
