@@ -36,6 +36,20 @@ Task tool (general-purpose):
     - Check for missing pieces they claimed to implement
     - Look for extra features they didn't mention
 
+    ## Progress Reporting in Codex
+
+    **Progress file:** [PROGRESS_FILE_PATH]
+
+    Codex subagents cannot stream partial progress back to the controller while still running. Append concise checkpoints to the progress file while you review so the controller can inspect your progress without interrupting you.
+
+    Write a short update when you:
+    - Start the review
+    - Finish checking the requirements against the code
+    - Discover a blocker or need clarification
+    - Are about to return your final verdict
+
+    Keep reviewing after each update. Put the actual verdict in your final response, not in the progress file.
+
     ## Your Job
 
     Read the implementation code and verify:

@@ -15,6 +15,8 @@ When you have multiple unrelated failures (different test files, different subsy
 
 **Codex requirement:** Explicitly set `model: "gpt-5.4"` for every dispatched subagent. This is the required latest GPT model for these workflows.
 
+**Codex limitation:** Subagents cannot stream partial progress back to the parent without stopping first. If you need in-flight visibility, assign each subagent its own shared progress file and inspect those files from the controller session.
+
 ## When to Use
 
 ```dot
@@ -63,6 +65,7 @@ Each agent gets:
 - **Specific scope:** One test file or subsystem
 - **Clear goal:** Make these tests pass
 - **Constraints:** Don't change other code
+- **Progress file:** One unique shared file path for status checkpoints
 - **Expected output:** Summary of what you found and fixed
 
 ### 3. Dispatch in Parallel
@@ -75,12 +78,16 @@ Task("Fix tool-approval-race-conditions.test.ts failures")
 // All three run concurrently
 
 // In Codex
-spawn_agent({ model: "gpt-5.4", message: "Fix agent-tool-abort.test.ts failures" })
-spawn_agent({ model: "gpt-5.4", message: "Fix batch-completion-behavior.test.ts failures" })
-spawn_agent({ model: "gpt-5.4", message: "Fix tool-approval-race-conditions.test.ts failures" })
+spawn_agent({ model: "gpt-5.4", message: "Fix agent-tool-abort.test.ts failures. Write progress checkpoints to .codex/progress/agent-tool-abort.md while you work." })
+spawn_agent({ model: "gpt-5.4", message: "Fix batch-completion-behavior.test.ts failures. Write progress checkpoints to .codex/progress/batch-completion.md while you work." })
+spawn_agent({ model: "gpt-5.4", message: "Fix tool-approval-race-conditions.test.ts failures. Write progress checkpoints to .codex/progress/tool-approval-race-conditions.md while you work." })
 ```
 
 ### 4. Review and Integrate
+
+While agents run:
+- Inspect each progress file when you need visibility into in-flight work
+- Look for stalls, blockers, or scope drift without interrupting the agents
 
 When agents return:
 - Read each summary
@@ -126,6 +133,9 @@ Return: Summary of what you found and what you fixed.
 
 **❌ No constraints:** Agent might refactor everything
 **✅ Constraints:** "Do NOT change production code" or "Fix tests only"
+
+**❌ Shared progress file:** Multiple agents clobber each other
+**✅ Unique progress file:** One shared file path per agent
 
 **❌ Vague output:** "Fix it" - you don't know what changed
 **✅ Specific:** "Return summary of root cause and changes"
@@ -176,8 +186,9 @@ Agent 3 → Fix tool-approval-race-conditions.test.ts
 After agents return:
 1. **Review each summary** - Understand what changed
 2. **Check for conflicts** - Did agents edit same code?
-3. **Run full suite** - Verify all fixes work together
-4. **Spot check** - Agents can make systematic errors
+3. **Inspect progress files if something looked stalled** - Distinguish "still working" from "actually blocked"
+4. **Run full suite** - Verify all fixes work together
+5. **Spot check** - Agents can make systematic errors
 
 ## Real-World Impact
 

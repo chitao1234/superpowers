@@ -40,6 +40,21 @@ Task tool (general-purpose):
 
     Work from: [directory]
 
+    ## Progress Reporting in Codex
+
+    **Progress file:** [PROGRESS_FILE_PATH]
+
+    Codex subagents cannot stream partial progress back to the controller while still running. To keep the controller informed without stopping, append concise checkpoints to the progress file above while you work.
+
+    Write a short update when you:
+    - Start the task
+    - Finish a major milestone
+    - Discover a blocker or need clarification
+    - Finish verification
+    - Are about to send the final report
+
+    Keep working after each update. The progress file is for in-flight status only; your final report still goes in the normal response.
+
     **While you work:** If you encounter something unexpected or unclear, **ask questions**.
     It's always OK to pause and clarify. Don't guess or make assumptions.
 

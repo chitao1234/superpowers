@@ -9,6 +9,8 @@ Dispatch superpowers:code-reviewer subagent to catch issues before they cascade.
 
 In Codex, explicitly dispatch the reviewer with `model: "gpt-5.4"`.
 
+Codex reviewer subagents also cannot stream partial progress back to the parent while they are still reviewing. If you want visibility during a long review, create a unique shared progress file, pass its path to the reviewer, and inspect that file from the main session.
+
 **Core principle:** Review early, review often.
 
 ## When to Request Review
@@ -31,7 +33,11 @@ BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
 HEAD_SHA=$(git rev-parse HEAD)
 ```
 
-**2. Dispatch code-reviewer subagent:**
+**2. Create a reviewer progress file (recommended for long reviews):**
+
+Example: `.codex/progress/task-2-code-review.md`
+
+**3. Dispatch code-reviewer subagent:**
 
 Use Task tool with superpowers:code-reviewer type, fill template at `code-reviewer.md`
 
@@ -41,8 +47,11 @@ Use Task tool with superpowers:code-reviewer type, fill template at `code-review
 - `{BASE_SHA}` - Starting commit
 - `{HEAD_SHA}` - Ending commit
 - `{DESCRIPTION}` - Brief summary
+- `{PROGRESS_FILE}` - Unique shared file path for in-flight review checkpoints
 
-**3. Act on feedback:**
+**4. Inspect the progress file while review runs when you need visibility.**
+
+**5. Act on feedback:**
 - Fix Critical issues immediately
 - Fix Important issues before proceeding
 - Note Minor issues for later
@@ -57,6 +66,7 @@ You: Let me request code review before proceeding.
 
 BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
 HEAD_SHA=$(git rev-parse HEAD)
+PROGRESS_FILE=.codex/progress/task-2-code-review.md
 
 [Dispatch superpowers:code-reviewer subagent]
   WHAT_WAS_IMPLEMENTED: Verification and repair functions for conversation index
@@ -64,6 +74,9 @@ HEAD_SHA=$(git rev-parse HEAD)
   BASE_SHA: a7981ec
   HEAD_SHA: 3df7661
   DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
+  PROGRESS_FILE: .codex/progress/task-2-code-review.md
+
+[Inspect progress file while reviewer runs]
 
 [Subagent returns]:
   Strengths: Clean architecture, real tests
@@ -97,6 +110,8 @@ You: [Fix progress indicators]
 - Skip review because "it's simple"
 - Ignore Critical issues
 - Proceed with unfixed Important issues
+- Assume reviewer can drip findings back live without stopping first
+- Reuse the same progress file for multiple reviewers
 - Argue with valid technical feedback
 
 **If reviewer wrong:**

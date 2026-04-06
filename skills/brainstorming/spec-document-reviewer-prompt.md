@@ -35,6 +35,14 @@ Task tool (general-purpose):
 
     Approve unless there are serious gaps that would lead to a flawed plan.
 
+    ## Progress Reporting in Codex
+
+    **Progress file:** [PROGRESS_FILE_PATH]
+
+    Codex subagents cannot stream partial progress back to the controller while still running. Append concise checkpoints to the progress file while you review so the controller can inspect your status without stopping you.
+
+    Keep reviewing after each update. Put the actual verdict in your final response, not in the progress file.
+
     ## Output Format
 
     ## Spec Review

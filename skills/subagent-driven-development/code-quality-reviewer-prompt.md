@@ -8,6 +8,8 @@ In Codex, dispatch this subagent with `model: "gpt-5.4"`.
 
 **Only dispatch after spec compliance review passes.**
 
+In Codex, provide a unique `PROGRESS_FILE` placeholder to the reviewer. Reviewer subagents cannot stream partial progress back to the parent while they are still running, so they should append checkpoints to that shared file during the review.
+
 ```
 Task tool (superpowers:code-reviewer):
   Use template at requesting-code-review/code-reviewer.md
@@ -17,6 +19,7 @@ Task tool (superpowers:code-reviewer):
   BASE_SHA: [commit before task]
   HEAD_SHA: [current commit]
   DESCRIPTION: [task summary]
+  PROGRESS_FILE: [unique shared progress file path]
 ```
 
 **In addition to standard code quality concerns, the reviewer should check:**

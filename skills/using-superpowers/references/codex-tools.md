@@ -32,6 +32,18 @@ from built-in roles (`default`, `explorer`, `worker`).
 
 For subagent dispatch in Codex, explicitly set `model="gpt-5.4"` (latest GPT model).
 
+## Progress visibility for subagents
+
+Codex subagents do not stream partial progress back to the parent while they are still running. The parent only gets the normal agent response after the child stops.
+
+When you need visibility into in-flight work:
+1. Create one unique shared progress file per subagent.
+2. Include that file path in the subagent message and tell the subagent to append short checkpoints while it works.
+3. Inspect that file from the main session while the subagent continues running.
+4. Treat the file as advisory status; the final result still comes from the subagent's returned message.
+
+Do not share one progress file across multiple subagents.
+
 When a skill says to dispatch a named agent type:
 
 1. Find the agent's prompt file (e.g., `agents/code-reviewer.md` or the skill's

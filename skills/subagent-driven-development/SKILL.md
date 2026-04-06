@@ -100,6 +100,19 @@ This applies to:
 
 Do not leave model selection implicit. Use the literal model string `gpt-5.4` in each `spawn_agent(...)` call so the workflow is consistent and reproducible.
 
+## Codex Progress Visibility
+
+Codex subagents cannot stream partial progress back to the parent while they are still running. The parent only receives the normal subagent response after that subagent stops.
+
+Work around this with shared progress files:
+- Before dispatch, create one unique progress file path per subagent.
+- Pass that path in the subagent prompt.
+- Tell the subagent to append short checkpoints when it starts, finishes a major milestone, gets blocked, or is about to hand back control.
+- Inspect that file from the main session while the subagent keeps running.
+- Treat the file as advisory status. The subagent's final response is still the authoritative result.
+
+Never have multiple subagents write to the same progress file.
+
 ## Handling Implementer Status
 
 Implementer subagents report one of four statuses. Handle each appropriately:
@@ -136,7 +149,9 @@ You: I'm using Subagent-Driven Development to execute this plan.
 Task 1: Hook installation script
 
 [Get Task 1 text and context (already extracted)]
-[Dispatch implementation subagent with full task text + context]
+[Create progress file: .codex/progress/task-1-implementer.md]
+[Dispatch implementation subagent with full task text + context + progress file path]
+[Inspect progress file while implementer runs]
 
 Implementer: "Before I begin - should the hook be installed at user or system level?"
 
@@ -150,9 +165,13 @@ Implementer: "Got it. Implementing now..."
   - Committed
 
 [Dispatch spec compliance reviewer]
+[Create progress file: .codex/progress/task-1-spec-review.md]
+[Inspect progress file while reviewer runs]
 Spec reviewer: ✅ Spec compliant - all requirements met, nothing extra
 
 [Get git SHAs, dispatch code quality reviewer]
+[Create progress file: .codex/progress/task-1-code-review.md]
+[Inspect progress file while reviewer runs]
 Code reviewer: Strengths: Good test coverage, clean. Issues: None. Approved.
 
 [Mark Task 1 complete]
@@ -210,7 +229,7 @@ Final reviewer: All requirements met
 
 **vs. Executing Plans:**
 - Same session (no handoff)
-- Continuous progress (no waiting)
+- Progress visible by polling shared files while subagents keep running
 - Review checkpoints automatic
 
 **Efficiency gains:**
@@ -218,6 +237,7 @@ Final reviewer: All requirements met
 - Controller curates exactly what context is needed
 - Subagent gets complete information upfront
 - Questions surfaced before work begins (not after)
+- Long-running work stays visible without forcing the subagent to stop and report early
 
 **Quality gates:**
 - Self-review catches issues before handoff
@@ -242,6 +262,8 @@ Final reviewer: All requirements met
 - Make subagent read plan file (provide full text instead)
 - Skip scene-setting context (subagent needs to understand where task fits)
 - Ignore subagent questions (answer before letting them proceed)
+- Assume `wait_agent` or the normal agent channel will show live partial progress
+- Reuse one progress file across multiple subagents
 - Accept "close enough" on spec compliance (spec reviewer found issues = not done)
 - Skip review loops (reviewer found issues = implementer fixes = review again)
 - Let implementer self-review replace actual review (both are needed)

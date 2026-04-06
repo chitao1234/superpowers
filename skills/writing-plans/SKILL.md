@@ -69,6 +69,8 @@ This structure informs the task decomposition. Each task should produce self-con
 # [Feature Name] Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task-by-task. If the user has expressed a strong preference for one of these execution styles, keep using that style unless they explicitly ask to switch. Steps use checkbox (`- [ ]`) syntax for tracking.
+>
+> **For Codex subagent-driven execution:** Subagents cannot stream partial progress back to the controller while still running. The controller should assign each subagent a unique shared progress file and inspect that file during execution when visibility is needed.
 
 **Goal:** [One sentence describing what this builds]
 
@@ -164,7 +166,7 @@ If the plan was checked into git, say:
 
 **"Plan complete and saved to `docs/superpowers/plans/<filename>.md` and checked into git. Two execution options:**
 
-**1. Subagent-Driven Execution** - I dispatch a fresh subagent per task, with review between tasks
+**1. Subagent-Driven Execution** - I dispatch a fresh subagent per task, with review between tasks and progress visibility via shared files in Codex
 
 **2. Plan-Based Execution** - I execute the plan with superpowers:executing-plans, following the written steps directly
 
@@ -174,7 +176,7 @@ If the plan was kept local-only, say:
 
 **"Plan complete and saved to `docs/superpowers/plans/<filename>.md` locally. Two execution options:**
 
-**1. Subagent-Driven Execution** - I dispatch a fresh subagent per task, with review between tasks
+**1. Subagent-Driven Execution** - I dispatch a fresh subagent per task, with review between tasks and progress visibility via shared files in Codex
 
 **2. Plan-Based Execution** - I execute the plan with superpowers:executing-plans, following the written steps directly
 
@@ -183,6 +185,7 @@ If the plan was kept local-only, say:
 **If Subagent-Driven Execution chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
 - Fresh subagent per task + two-stage review
+- In Codex, use one shared progress file per subagent because child agents cannot stream partial progress live
 
 **If Plan-Based Execution chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:executing-plans

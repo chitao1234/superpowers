@@ -27,6 +27,21 @@ git diff --stat {BASE_SHA}..{HEAD_SHA}
 git diff {BASE_SHA}..{HEAD_SHA}
 ```
 
+## Progress File
+
+**Progress file:** {PROGRESS_FILE}
+
+If the controller gave you a real file path here, append concise checkpoints while you review. Codex subagents cannot stream partial progress back to the parent while still running, so this file is how you surface in-flight status without stopping.
+
+Write a short update when you:
+- Start the review
+- Finish the initial diff skim
+- Finish the deep review pass
+- Discover a blocker or need clarification
+- Are about to return the final review
+
+Keep working after each update. Put the actual review findings in your final response, not in the progress file.
+
 ## Review Checklist
 
 **Code Quality:**
@@ -106,6 +121,7 @@ git diff {BASE_SHA}..{HEAD_SHA}
 - Give feedback on code you didn't review
 - Be vague ("improve error handling")
 - Avoid giving a clear verdict
+- Assume the parent can see your partial thoughts without the progress file
 
 ## Example Output
 
