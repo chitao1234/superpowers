@@ -14,10 +14,10 @@ In Codex, provide a unique `PROGRESS_FILE` placeholder to the reviewer. Reviewer
 Task tool (superpowers:code-reviewer):
   Use template at requesting-code-review/code-reviewer.md
 
-  WHAT_WAS_IMPLEMENTED: [from implementer's report]
-  PLAN_OR_REQUIREMENTS: Task N from [plan-file]
-  BASE_SHA: [commit before task]
-  HEAD_SHA: [current commit]
+  WHAT_WAS_IMPLEMENTED: [from the main agent's implementation summary]
+  PLAN_OR_REQUIREMENTS: [FULL TEXT of task requirements - paste it here, don't make reviewer read the plan file]
+  BASE_SHA: [commit before task or other clean base for the task diff]
+  HEAD_SHA: [current task diff head prepared by the main agent]
   DESCRIPTION: [task summary]
   PROGRESS_FILE: [unique shared progress file path]
 ```

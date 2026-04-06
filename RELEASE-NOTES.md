@@ -241,7 +241,7 @@ Design-for-isolation and file-size-awareness guidance added to brainstorming, wr
 
 - **Brainstorming** — New sections: "Design for isolation and clarity" (clear boundaries, well-defined interfaces, independently testable units) and "Working in existing codebases" (follow existing patterns, targeted improvements only)
 - **Writing-plans** — New "File Structure" section: map out files and responsibilities before defining tasks. New "Scope Check" backstop: catch multi-subsystem specs that should have been decomposed during brainstorming
-- **SDD implementer** — New "Code Organization" section (follow plan's file structure, report concerns about growing files) and "When You're in Over Your Head" escalation guidance
+- **SDD main-session implementation** — New "Code Organization" section (follow plan's file structure, report concerns about growing files) and "When You're in Over Your Head" escalation guidance
 - **SDD code quality reviewer** — Now checks architecture, unit decomposition, plan conformance, and file growth
 - **Spec/plan reviewers** — Architecture and file size added to review criteria
 - **Scope assessment** — Brainstorming now assesses whether a project is too large for a single spec. Multi-subsystem requests are flagged early and decomposed into sub-projects, each with its own spec → plan → implementation cycle
@@ -501,20 +501,19 @@ Added guidance that mechanical constraints should be automated, not documented�
 
 Subagent workflows now use two separate review stages after each task:
 
-1. **Spec compliance review** - Skeptical reviewer verifies implementation matches spec exactly. Catches missing requirements AND over-building. Won't trust implementer's report—reads actual code.
+1. **Spec compliance review** - Skeptical reviewer verifies implementation matches spec exactly. Catches missing requirements AND over-building. Won't trust the implementation summary—reads actual code.
 
 2. **Code quality review** - Only runs after spec compliance passes. Reviews for clean code, test coverage, maintainability.
 
-This catches the common failure mode where code is well-written but doesn't match what was requested. Reviews are loops, not one-shot: if reviewer finds issues, implementer fixes them, then reviewer checks again.
+This catches the common failure mode where code is well-written but doesn't match what was requested. Reviews are loops, not one-shot: if reviewer finds issues, the implementing agent fixes them, then reviewer checks again.
 
 Other subagent workflow improvements:
-- Controller provides full task text to workers (not file references)
-- Workers can ask clarifying questions before AND during work
-- Self-review checklist before reporting completion
+- Controller provides full task text to reviewer subagents (not file references)
+- Main-session implementation keeps context local while reviewers stay isolated
+- Self-review checklist before review dispatch
 - Plan read once at start, extracted to TodoWrite
 
-New prompt templates in `skills/subagent-driven-development/`:
-- `implementer-prompt.md` - Includes self-review checklist, encourages questions
+Review prompt templates in `skills/subagent-driven-development/`:
 - `spec-reviewer-prompt.md` - Skeptical verification against requirements
 - `code-quality-reviewer-prompt.md` - Standard code review
 

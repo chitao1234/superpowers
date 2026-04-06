@@ -44,7 +44,7 @@ echo ""
 # Test 3: Verify self-review is mentioned
 echo "Test 3: Self-review requirement..."
 
-output=$(run_claude "Does the subagent-driven-development skill require implementers to do self-review? What should they check?" 30)
+output=$(run_claude "Does the subagent-driven-development skill require the main agent to do self-review before dispatching reviewers? What should they check?" 30)
 
 if assert_contains "$output" "self-review\|self review" "Mentions self-review"; then
     : # pass
@@ -82,7 +82,7 @@ echo ""
 # Test 5: Verify spec compliance reviewer is skeptical
 echo "Test 5: Spec compliance reviewer mindset..."
 
-output=$(run_claude "What is the spec compliance reviewer's attitude toward the implementer's report in subagent-driven-development?" 30)
+output=$(run_claude "What is the spec compliance reviewer's attitude toward the main agent's implementation summary in subagent-driven-development?" 30)
 
 if assert_contains "$output" "not trust\|don't trust\|skeptical\|verify.*independently\|suspiciously" "Reviewer is skeptical"; then
     : # pass
@@ -109,7 +109,7 @@ else
     exit 1
 fi
 
-if assert_contains "$output" "implementer.*fix\|fix.*issues" "Implementer fixes issues"; then
+if assert_contains "$output" "main agent.*fix\|fix.*issues" "Main agent fixes issues"; then
     : # pass
 else
     exit 1
@@ -117,18 +117,18 @@ fi
 
 echo ""
 
-# Test 7: Verify full task text is provided
-echo "Test 7: Task context provision..."
+# Test 7: Verify implementation stays in main session
+echo "Test 7: Implementation ownership..."
 
-output=$(run_claude "In subagent-driven-development, how does the controller provide task information to the implementer subagent? Does it make them read a file or provide it directly?" 30)
+output=$(run_claude "In subagent-driven-development, who does the implementation work: the main agent or an implementer subagent?" 30)
 
-if assert_contains "$output" "provide.*directly\|full.*text\|paste\|include.*prompt" "Provides text directly"; then
+if assert_contains "$output" "main agent\|main session" "Main agent implements"; then
     : # pass
 else
     exit 1
 fi
 
-if assert_not_contains "$output" "read.*file\|open.*file" "Doesn't make subagent read file"; then
+if assert_contains "$output" "not.*implementer subagent\|rather than.*implementer subagent\|instead of.*implementer subagent" "Implementation stays out of subagent role"; then
     : # pass
 else
     exit 1
@@ -136,8 +136,27 @@ fi
 
 echo ""
 
-# Test 8: Verify worktree requirement
-echo "Test 8: Worktree requirement..."
+# Test 8: Verify full task text is provided to reviewers
+echo "Test 8: Reviewer context provision..."
+
+output=$(run_claude "In subagent-driven-development, how should the main agent provide task information to reviewer subagents? Does it make them read a plan file or provide the task text directly?" 30)
+
+if assert_contains "$output" "provide.*directly\|full.*text\|paste\|include.*prompt" "Provides task text directly"; then
+    : # pass
+else
+    exit 1
+fi
+
+if assert_contains "$output" "not.*read.*plan file\|don't.*read.*plan file\|rather than.*read.*plan file\|instead of.*read.*plan file" "Doesn't make reviewer read plan file"; then
+    : # pass
+else
+    exit 1
+fi
+
+echo ""
+
+# Test 9: Verify worktree requirement
+echo "Test 9: Worktree requirement..."
 
 output=$(run_claude "What workflow skills are required before using subagent-driven-development? List any prerequisites or required skills." 30)
 
@@ -149,8 +168,8 @@ fi
 
 echo ""
 
-# Test 9: Verify main branch warning
-echo "Test 9: Main branch red flag..."
+# Test 10: Verify main branch warning
+echo "Test 10: Main branch red flag..."
 
 output=$(run_claude "In subagent-driven-development, is it okay to start implementation directly on the main branch?" 30)
 

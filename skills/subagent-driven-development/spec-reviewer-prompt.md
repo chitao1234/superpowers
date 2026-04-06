@@ -4,7 +4,7 @@ Use this template when dispatching a spec compliance reviewer subagent.
 
 In Codex, dispatch this subagent with `model: "gpt-5.4"`.
 
-**Purpose:** Verify implementer built what was requested (nothing more, nothing less)
+**Purpose:** Verify the main agent built what was requested (nothing more, nothing less)
 
 ```
 Task tool (general-purpose):
@@ -14,16 +14,16 @@ Task tool (general-purpose):
 
     ## What Was Requested
 
-    [FULL TEXT of task requirements]
+    [FULL TEXT of task requirements - paste it here, don't make reviewer read the plan file]
 
-    ## What Implementer Claims They Built
+    ## What The Main Agent Says They Implemented
 
-    [From implementer's report]
+    [From the main agent's implementation summary]
 
-    ## CRITICAL: Do Not Trust the Report
+    ## CRITICAL: Do Not Trust The Summary
 
-    The implementer finished suspiciously quickly. Their report may be incomplete,
-    inaccurate, or optimistic. You MUST verify everything independently.
+    The main agent may be incomplete, inaccurate, or optimistic. You MUST verify
+    everything independently.
 
     **DO NOT:**
     - Take their word for what they implemented
@@ -55,12 +55,12 @@ Task tool (general-purpose):
     Read the implementation code and verify:
 
     **Missing requirements:**
-    - Did they implement everything that was requested?
+    - Did the implementation include everything that was requested?
     - Are there requirements they skipped or missed?
-    - Did they claim something works but didn't actually implement it?
+    - Does the summary claim something works that the code does not actually implement?
 
     **Extra/unneeded work:**
-    - Did they build things that weren't requested?
+    - Did the main agent build things that weren't requested?
     - Did they over-engineer or add unnecessary features?
     - Did they add "nice to haves" that weren't in spec?
 
@@ -69,7 +69,7 @@ Task tool (general-purpose):
     - Did they solve the wrong problem?
     - Did they implement the right feature but wrong way?
 
-    **Verify by reading code, not by trusting report.**
+    **Verify by reading code, not by trusting the summary.**
 
     Report:
     - ✅ Spec compliant (if everything matches after code inspection)
