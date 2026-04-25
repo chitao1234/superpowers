@@ -1,5 +1,7 @@
 # Code Review Agent
 
+In Codex, dispatch this reviewer with `model: "gpt-5.4"` and `reasoning_effort: "high"` by default. Use `reasoning_effort: "xhigh"` for especially broad or subtle reviews, and do not use `medium` or lower for this reviewer.
+
 You are reviewing code changes for production readiness.
 
 **Your task:**

@@ -1,15 +1,15 @@
 # Codex Tool Mapping
 
-Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
+If a skill still contains legacy terminology, translate it to Codex using this table:
 
 | Skill references | Codex equivalent |
 |-----------------|------------------|
-| `Task` tool (dispatch subagent) | `spawn_agent(model="gpt-5.4", ...)` (see [Named agent dispatch](#named-agent-dispatch)) |
-| Multiple `Task` calls (parallel) | Multiple `spawn_agent(model="gpt-5.4", ...)` calls |
-| Task returns result | `wait` |
-| Task completes automatically | `close_agent` to free slot |
+| `Task` tool (dispatch subagent) | `spawn_agent(model="gpt-5.4", reasoning_effort="high", ...)` (see [Named agent dispatch](#named-agent-dispatch)) |
+| Multiple `Task` calls (parallel) | Multiple `spawn_agent(model="gpt-5.4", reasoning_effort="high", ...)` calls |
+| Task returns result | `wait_agent` |
+| Task completes automatically | `close_agent` to free the slot when you no longer need it |
 | `TodoWrite` (task tracking) | `update_plan` |
-| `Skill` tool (invoke a skill) | Skills load natively — just follow the instructions |
+| `Skill` tool (invoke a skill) | Open the skill's `SKILL.md` from the listed path and follow it |
 | `Read`, `Write`, `Edit` (files) | Use your native file tools |
 | `Bash` (run commands) | Use your native shell tools |
 
@@ -22,15 +22,17 @@ Add to your Codex config (`~/.codex/config.toml`):
 multi_agent = true
 ```
 
-This enables `spawn_agent`, `wait`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`.
+This enables `spawn_agent`, `wait_agent`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`.
 
 ## Named agent dispatch
 
-Claude Code skills reference named agent types like `superpowers:code-reviewer`.
+Some older skills reference named agent types like `superpowers:code-reviewer`.
 Codex does not have a named agent registry — `spawn_agent` creates generic agents
 from built-in roles (`default`, `explorer`, `worker`).
 
-For subagent dispatch in Codex, explicitly set `model="gpt-5.4"` (latest GPT model).
+For GPT subagent dispatch in Codex, explicitly set `model="gpt-5.4"` (latest GPT model) and set `reasoning_effort` to `"high"` or `"xhigh"`.
+
+Use `"high"` by default and raise to `"xhigh"` for especially difficult synthesis, review, or planning work. Do not use `"medium"` or lower unless the subagent is purely exploratory, such as the built-in `explorer` role.
 
 ## Progress visibility for subagents
 
@@ -50,12 +52,12 @@ When a skill says to dispatch a named agent type:
    local prompt template like `code-quality-reviewer-prompt.md`)
 2. Read the prompt content
 3. Fill any template placeholders (`{BASE_SHA}`, `{WHAT_WAS_IMPLEMENTED}`, etc.)
-4. Spawn a `worker` agent with `model="gpt-5.4"` and the filled content as the `message`
+4. Spawn a `worker` agent with `model="gpt-5.4"` and `reasoning_effort="high"` (or `"xhigh"` when warranted) and the filled content as the `message`
 
 | Skill instruction | Codex equivalent |
 |-------------------|------------------|
-| `Task tool (superpowers:code-reviewer)` | `spawn_agent(agent_type="worker", model="gpt-5.4", message=...)` with `code-reviewer.md` content |
-| `Task tool (general-purpose)` with inline prompt | `spawn_agent(model="gpt-5.4", message=...)` with the same prompt |
+| `Task tool (superpowers:code-reviewer)` | `spawn_agent(agent_type="worker", model="gpt-5.4", reasoning_effort="high", message=...)` with `code-reviewer.md` content |
+| `Task tool (general-purpose)` with inline prompt | `spawn_agent(model="gpt-5.4", reasoning_effort="high", message=...)` with the same prompt |
 
 ### Message framing
 

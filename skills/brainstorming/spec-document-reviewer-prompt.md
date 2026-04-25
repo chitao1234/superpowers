@@ -2,16 +2,18 @@
 
 Use this template when dispatching a spec document reviewer subagent.
 
-In Codex, dispatch this subagent with `model: "gpt-5.4"`.
+In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
 **Purpose:** Verify the spec is complete, consistent, and ready for implementation planning.
 
 **Dispatch after:** Spec document is written to docs/superpowers/specs/
 
 ```
-Task tool (general-purpose):
-  description: "Review spec document"
-  prompt: |
+Codex subagent dispatch:
+  agent_type: "worker"
+  model: "gpt-5.4"
+  reasoning_effort: "high"
+  message: |
     You are a spec document reviewer. Verify this spec is complete and ready for planning.
 
     **Spec to review:** [SPEC_FILE_PATH]

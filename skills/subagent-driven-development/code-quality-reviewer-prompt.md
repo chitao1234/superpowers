@@ -2,7 +2,7 @@
 
 Use this template when dispatching a code quality reviewer subagent.
 
-In Codex, dispatch this subagent with `model: "gpt-5.4"`.
+In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
 **Purpose:** Verify implementation is well-built (clean, tested, maintainable)
 
@@ -11,8 +11,11 @@ In Codex, dispatch this subagent with `model: "gpt-5.4"`.
 In Codex, provide a unique `PROGRESS_FILE` placeholder to the reviewer. Reviewer subagents cannot stream partial progress back to the parent while they are still running, so they should append checkpoints to that shared file during the review.
 
 ```
-Task tool (superpowers:code-reviewer):
-  Use template at requesting-code-review/code-reviewer.md
+Codex reviewer subagent:
+  agent_type: "worker"
+  model: "gpt-5.4"
+  reasoning_effort: "high"
+  message: use the filled template at requesting-code-review/code-reviewer.md
 
   WHAT_WAS_IMPLEMENTED: [from the main agent's implementation summary]
   PLAN_OR_REQUIREMENTS: [FULL TEXT of task requirements - paste it here, don't make reviewer read the plan file]

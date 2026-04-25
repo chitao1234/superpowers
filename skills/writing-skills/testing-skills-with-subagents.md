@@ -12,7 +12,7 @@ You run scenarios without the skill (RED - watch agent fail), write skill addres
 
 **Helpful background:** superpowers:test-driven-development explains the RED-GREEN-REFACTOR mental model, but use this reference only when the skill change actually needs that level of validation.
 
-**Complete worked example:** See examples/CLAUDE_MD_TESTING.md for a full test campaign testing CLAUDE.md documentation variants.
+**Complete worked example:** See examples/AGENTS_MD_TESTING.md for a full test campaign testing `AGENTS.md` documentation variants.
 
 ## When to Use
 

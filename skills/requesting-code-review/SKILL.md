@@ -5,9 +5,9 @@ description: Use when completing tasks, implementing major features, or before m
 
 # Requesting Code Review
 
-Dispatch superpowers:code-reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history. This keeps the reviewer focused on the work product, not your thought process, and preserves your own context for continued work.
+Dispatch a reviewer subagent with the prompt template at `code-reviewer.md` to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation, not your session's history. This keeps the reviewer focused on the work product, not your thought process, and preserves your own context for continued work.
 
-In Codex, explicitly dispatch the reviewer with `model: "gpt-5.4"`.
+In Codex, explicitly dispatch the reviewer with `model: "gpt-5.4"` and `reasoning_effort: "high"` by default. Raise that to `reasoning_effort: "xhigh"` for especially broad, risky, or subtle reviews. Do not use `medium` or lower for reviewer subagents.
 
 Codex reviewer subagents also cannot stream partial progress back to the parent while they are still reviewing. If you want visibility during a long review, create a unique shared progress file, pass its path to the reviewer, and inspect that file from the main session.
 
@@ -37,9 +37,9 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 Example: `.codex/progress/task-2-code-review.md`
 
-**3. Dispatch code-reviewer subagent:**
+**3. Dispatch reviewer subagent:**
 
-Use Task tool with superpowers:code-reviewer type, fill template at `code-reviewer.md`
+Use `spawn_agent(...)` with `agent_type: "worker"` and the filled template at `code-reviewer.md`.
 
 **Placeholders:**
 - `{WHAT_WAS_IMPLEMENTED}` - What you just built
@@ -68,7 +68,7 @@ BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
 HEAD_SHA=$(git rev-parse HEAD)
 PROGRESS_FILE=.codex/progress/task-2-code-review.md
 
-[Dispatch superpowers:code-reviewer subagent]
+[Dispatch reviewer subagent with filled `code-reviewer.md` template]
   WHAT_WAS_IMPLEMENTED: Verification and repair functions for conversation index
   PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
   BASE_SHA: a7981ec

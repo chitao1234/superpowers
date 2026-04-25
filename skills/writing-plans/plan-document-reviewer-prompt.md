@@ -2,16 +2,18 @@
 
 Use this template when dispatching a plan document reviewer subagent.
 
-In Codex, dispatch this subagent with `model: "gpt-5.4"`.
+In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
 **Purpose:** Verify the plan is complete, matches the spec, and has proper task decomposition.
 
 **Dispatch after:** The complete plan is written.
 
 ```
-Task tool (general-purpose):
-  description: "Review plan document"
-  prompt: |
+Codex subagent dispatch:
+  agent_type: "worker"
+  model: "gpt-5.4"
+  reasoning_effort: "high"
+  message: |
     You are a plan document reviewer. Verify this plan is complete and ready for implementation.
 
     **Plan to review:** [PLAN_FILE_PATH]

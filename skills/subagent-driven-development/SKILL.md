@@ -60,15 +60,15 @@ digraph process {
         "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [shape=box];
         "Code quality reviewer subagent approves?" [shape=diamond];
         "Main agent fixes quality issues" [shape=box];
-        "Mark task complete in TodoWrite" [shape=box];
+        "Mark task complete in update_plan" [shape=box];
     }
 
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
+    "Read plan, extract all tasks with full text, note context, initialize update_plan" [shape=box];
     "More tasks remain?" [shape=diamond];
     "Dispatch final code reviewer subagent for entire implementation" [shape=box];
     "Report implementation complete to human partner" [shape=box style=filled fillcolor=lightgreen];
 
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" -> "Review task text and context in main session";
+    "Read plan, extract all tasks with full text, note context, initialize update_plan" -> "Review task text and context in main session";
     "Review task text and context in main session" -> "Questions or blockers?";
     "Questions or blockers?" -> "Ask human, update context or plan" [label="yes"];
     "Ask human, update context or plan" -> "Review task text and context in main session";
@@ -81,8 +81,8 @@ digraph process {
     "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" -> "Code quality reviewer subagent approves?";
     "Code quality reviewer subagent approves?" -> "Main agent fixes quality issues" [label="no"];
     "Main agent fixes quality issues" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="re-review"];
-    "Code quality reviewer subagent approves?" -> "Mark task complete in TodoWrite" [label="yes"];
-    "Mark task complete in TodoWrite" -> "More tasks remain?";
+    "Code quality reviewer subagent approves?" -> "Mark task complete in update_plan" [label="yes"];
+    "Mark task complete in update_plan" -> "More tasks remain?";
     "More tasks remain?" -> "Review task text and context in main session" [label="yes"];
     "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
     "Dispatch final code reviewer subagent for entire implementation" -> "Report implementation complete to human partner";
@@ -91,14 +91,18 @@ digraph process {
 
 ## Model Requirement
 
-When dispatching any subagent for this workflow in Codex, explicitly set the model name to `gpt-5.4` (latest GPT model).
+When dispatching any subagent for this workflow in Codex, explicitly set the model name to `gpt-5.4` (latest GPT model) and set `reasoning_effort` explicitly.
 
 This applies to:
 - spec reviewer subagents
 - code quality reviewer subagents
 - the final code reviewer subagent
 
-Do not leave model selection implicit. Use the literal model string `gpt-5.4` in each `spawn_agent(...)` call so the workflow is consistent and reproducible.
+Use `reasoning_effort: "high"` by default for per-task reviewer subagents, and raise it to `reasoning_effort: "xhigh"` for unusually subtle, risky, or whole-implementation reviews.
+
+Do not leave model or reasoning selection implicit. In this workflow, do not use `medium` or lower — the pure-exploration exception does not apply because these subagents are evaluating deliverables, not just exploring.
+
+Use the literal model string `gpt-5.4` in each `spawn_agent(...)` call so the workflow is consistent and reproducible.
 
 ## Codex Progress Visibility
 
@@ -163,7 +167,7 @@ You: I'm using Subagent-Driven Development to execute this plan.
 
 [Read plan file once: docs/superpowers/plans/feature-plan.md]
 [Extract all 5 tasks with full text and context]
-[Create TodoWrite with all tasks]
+[Initialize `update_plan` with all tasks]
 
 Task 1: Hook installation script
 
@@ -184,7 +188,7 @@ Spec reviewer: ✅ Spec compliant - all requirements met, nothing extra
 [Inspect progress file while reviewer runs]
 Code reviewer: Strengths: Good test coverage, clean. Issues: None. Approved.
 
-[Mark Task 1 complete]
+[Mark Task 1 complete in `update_plan`]
 
 Task 2: Recovery modes
 
@@ -213,7 +217,7 @@ Code reviewer: Strengths: Solid. Issues (Important): Magic number (100)
 [Code reviewer reviews again]
 Code reviewer: ✅ Approved
 
-[Mark Task 2 complete]
+[Mark Task 2 complete in `update_plan`]
 
 ...
 

@@ -2,14 +2,16 @@
 
 Use this template when dispatching a spec compliance reviewer subagent.
 
-In Codex, dispatch this subagent with `model: "gpt-5.4"`.
+In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
 **Purpose:** Verify the main agent built what was requested (nothing more, nothing less)
 
 ```
-Task tool (general-purpose):
-  description: "Review spec compliance for Task N"
-  prompt: |
+Codex subagent dispatch:
+  agent_type: "worker"
+  model: "gpt-5.4"
+  reasoning_effort: "high"
+  message: |
     You are reviewing whether an implementation matches its specification.
 
     ## What Was Requested
