@@ -225,7 +225,7 @@ Code reviewer: ✅ Approved
 [Dispatch final code-reviewer]
 Final reviewer: All requirements met
 
-[Report implementation complete, summarize verification, leave branch/worktree state unchanged]
+[Report implementation complete, summarize verification]
 ```
 
 ## Advantages
@@ -264,7 +264,6 @@ Final reviewer: All requirements met
 ## Red Flags
 
 **Never:**
-- Start implementation on main/master branch without explicit user consent
 - Skip reviews (spec compliance OR code quality)
 - Proceed with unfixed issues
 - Hand routine implementation off to an implementer subagent in this workflow
@@ -296,7 +295,6 @@ Final reviewer: All requirements met
 ## Integration
 
 **Required workflow skills:**
-- **superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
 - **superpowers:writing-plans** - Creates the plan this skill executes
 - **superpowers:requesting-code-review** - Code review template for reviewer subagents
 

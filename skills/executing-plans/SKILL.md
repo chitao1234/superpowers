@@ -34,7 +34,6 @@ For each task:
 After all tasks complete and verified:
 - Report implementation complete
 - Summarize the verification that passed
-- Leave branch and worktree state unchanged unless the user explicitly asks for cleanup or integration work
 
 ## When to Stop and Ask for Help
 
@@ -61,10 +60,8 @@ After all tasks complete and verified:
 - Reference skills when plan says to
 - Respect the user's established execution-style preference until they explicitly change it
 - Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
 
 ## Integration
 
 **Required workflow skills:**
-- **superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
 - **superpowers:writing-plans** - Creates the plan this skill executes
