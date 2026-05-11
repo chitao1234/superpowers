@@ -15,7 +15,7 @@ You are reviewing code changes for production readiness.
 
 {DESCRIPTION}
 
-## Requirements/Plan
+## Plan / Requirements
 
 {PLAN_REFERENCE}
 
@@ -67,7 +67,8 @@ Keep working after each update. Put the actual review findings in your final res
 
 **Requirements:**
 - All plan requirements met?
-- Implementation matches spec?
+- Implementation matches the plan's required behavior and architecture?
+- If the plan included placeholders or demonstration snippets, were they resolved sensibly instead of copied blindly?
 - No scope creep?
 - Breaking changes documented?
 

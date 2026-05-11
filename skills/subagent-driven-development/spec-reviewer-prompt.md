@@ -1,10 +1,10 @@
-# Spec Compliance Reviewer Prompt Template
+# Task Requirements Reviewer Prompt Template
 
-Use this template when dispatching a spec compliance reviewer subagent.
+Use this template when dispatching a task-requirements reviewer subagent.
 
 In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
-**Purpose:** Verify the main agent built what was requested (nothing more, nothing less)
+**Purpose:** Verify the main agent built what the task requested from the merged plan, nothing more and nothing less.
 
 ```
 Codex subagent dispatch:
@@ -12,11 +12,17 @@ Codex subagent dispatch:
   model: "gpt-5.4"
   reasoning_effort: "high"
   message: |
-    You are reviewing whether an implementation matches its specification.
+    You are reviewing whether an implementation matches its task requirements.
 
     ## What Was Requested
 
     [FULL TEXT of task requirements - paste it here, don't make reviewer read the plan file]
+
+    ## Important Context
+
+    The task text came from a merged plan artifact. That plan may include bounded placeholders
+    and small demonstration snippets. Judge compliance against the required behavior, constraints,
+    and scope. Do NOT require the main agent to copy any illustrative snippet literally.
 
     ## What The Main Agent Says They Implemented
 
@@ -30,11 +36,11 @@ Codex subagent dispatch:
     **DO NOT:**
     - Take their word for what they implemented
     - Trust their claims about completeness
-    - Accept their interpretation of requirements
+    - Treat demonstration code from the plan as the literal required implementation
 
     **DO:**
     - Read the actual code they wrote
-    - Compare actual implementation to requirements line by line
+    - Compare actual implementation to the task requirements line by line
     - Check for missing pieces they claimed to implement
     - Look for extra features they didn't mention
 
@@ -61,19 +67,19 @@ Codex subagent dispatch:
     - Are there requirements they skipped or missed?
     - Does the summary claim something works that the code does not actually implement?
 
-    **Extra/unneeded work:**
+    **Extra or unneeded work:**
     - Did the main agent build things that weren't requested?
     - Did they over-engineer or add unnecessary features?
-    - Did they add "nice to haves" that weren't in spec?
+    - Did they add "nice to haves" that weren't part of the task?
 
     **Misunderstandings:**
     - Did they interpret requirements differently than intended?
     - Did they solve the wrong problem?
-    - Did they implement the right feature but wrong way?
+    - Did they implement the right feature but in a way that violates the task constraints?
 
     **Verify by reading code, not by trusting the summary.**
 
     Report:
-    - ✅ Spec compliant (if everything matches after code inspection)
+    - ✅ Requirements compliant (if everything matches after code inspection)
     - ❌ Issues found: [list specifically what's missing or extra, with file:line references]
 ```

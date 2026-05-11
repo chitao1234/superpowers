@@ -1,15 +1,17 @@
 ---
 name: subagent-driven-development
-description: Use when executing implementation plans with independent tasks in the current session
+description: Use when executing written plans with independent tasks in the current session
 ---
 
 # Subagent-Driven Development
 
-Execute the plan in the main session, with fresh reviewer subagents after each task: spec compliance review first, then code quality review.
+Execute the merged plan in the main session, with fresh reviewer subagents after each task: task-requirements review first, then code quality review.
 
 **Why subagents:** Use reviewer subagents with isolated context to audit each task without inheriting the main session's assumptions. You construct exactly what they need, they read the actual code, and they pressure-test the work from the outside.
 
 **Core principle:** Main agent implements + fresh reviewer subagent per review stage = high quality, fast iteration
+
+The plan is authoritative for scope, sequencing, and constraints. Any code blocks inside it are illustrative only. Resolve concrete implementation details in the repo during execution.
 
 Testing strategy comes from the plan: use strict TDD for tasks with a clear failing-test seam, and use lighter verification for docs, mechanical edits, or structural work that is not meaningfully test-first.
 
@@ -19,15 +21,15 @@ This is a first-class execution path. Use it when the user chooses subagent-driv
 
 ```dot
 digraph when_to_use {
-    "Have implementation plan?" [shape=diamond];
+    "Have written plan?" [shape=diamond];
     "Tasks mostly independent?" [shape=diamond];
     "Stay in this session?" [shape=diamond];
     "subagent-driven-development" [shape=box];
     "executing-plans" [shape=box];
     "Manual execution or brainstorm first" [shape=box];
 
-    "Have implementation plan?" -> "Tasks mostly independent?" [label="yes"];
-    "Have implementation plan?" -> "Manual execution or brainstorm first" [label="no"];
+    "Have written plan?" -> "Tasks mostly independent?" [label="yes"];
+    "Have written plan?" -> "Manual execution or brainstorm first" [label="no"];
     "Tasks mostly independent?" -> "Stay in this session?" [label="yes"];
     "Tasks mostly independent?" -> "Manual execution or brainstorm first" [label="no - tightly coupled"];
     "Stay in this session?" -> "subagent-driven-development" [label="yes"];
@@ -39,7 +41,7 @@ digraph when_to_use {
 - Same session (no context switch)
 - Main agent keeps full implementation context
 - Fresh reviewer subagents per task (no review-context pollution)
-- Two-stage review after each task: spec compliance first, then code quality
+- Two-stage review after each task: requirements compliance first, then code quality
 - Faster iteration (no human-in-loop between tasks)
 
 ## The Process
@@ -54,11 +56,11 @@ digraph process {
         "Questions or blockers?" [shape=diamond];
         "Ask human, update context or plan" [shape=box];
         "Main agent implements, verifies, self-reviews" [shape=box];
-        "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [shape=box];
-        "Spec reviewer subagent confirms code matches spec?" [shape=diamond];
-        "Main agent fixes spec gaps" [shape=box];
+        "Dispatch requirements reviewer subagent (./spec-reviewer-prompt.md)" [shape=box];
+        "Requirements reviewer confirms code matches task?" [shape=diamond];
+        "Main agent fixes requirement gaps" [shape=box];
         "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [shape=box];
-        "Code quality reviewer subagent approves?" [shape=diamond];
+        "Code quality reviewer approves?" [shape=diamond];
         "Main agent fixes quality issues" [shape=box];
         "Mark task complete in update_plan" [shape=box];
     }
@@ -73,15 +75,15 @@ digraph process {
     "Questions or blockers?" -> "Ask human, update context or plan" [label="yes"];
     "Ask human, update context or plan" -> "Review task text and context in main session";
     "Questions or blockers?" -> "Main agent implements, verifies, self-reviews" [label="no"];
-    "Main agent implements, verifies, self-reviews" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)";
-    "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" -> "Spec reviewer subagent confirms code matches spec?";
-    "Spec reviewer subagent confirms code matches spec?" -> "Main agent fixes spec gaps" [label="no"];
-    "Main agent fixes spec gaps" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [label="re-review"];
-    "Spec reviewer subagent confirms code matches spec?" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="yes"];
-    "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" -> "Code quality reviewer subagent approves?";
-    "Code quality reviewer subagent approves?" -> "Main agent fixes quality issues" [label="no"];
+    "Main agent implements, verifies, self-reviews" -> "Dispatch requirements reviewer subagent (./spec-reviewer-prompt.md)";
+    "Dispatch requirements reviewer subagent (./spec-reviewer-prompt.md)" -> "Requirements reviewer confirms code matches task?";
+    "Requirements reviewer confirms code matches task?" -> "Main agent fixes requirement gaps" [label="no"];
+    "Main agent fixes requirement gaps" -> "Dispatch requirements reviewer subagent (./spec-reviewer-prompt.md)" [label="re-review"];
+    "Requirements reviewer confirms code matches task?" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="yes"];
+    "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" -> "Code quality reviewer approves?";
+    "Code quality reviewer approves?" -> "Main agent fixes quality issues" [label="no"];
     "Main agent fixes quality issues" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="re-review"];
-    "Code quality reviewer subagent approves?" -> "Mark task complete in update_plan" [label="yes"];
+    "Code quality reviewer approves?" -> "Mark task complete in update_plan" [label="yes"];
     "Mark task complete in update_plan" -> "More tasks remain?";
     "More tasks remain?" -> "Review task text and context in main session" [label="yes"];
     "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
@@ -94,13 +96,13 @@ digraph process {
 When dispatching any subagent for this workflow in Codex, explicitly set the model name to `gpt-5.4` (latest GPT model) and set `reasoning_effort` explicitly.
 
 This applies to:
-- spec reviewer subagents
+- requirements reviewer subagents
 - code quality reviewer subagents
 - the final code reviewer subagent
 
 Use `reasoning_effort: "high"` by default for per-task reviewer subagents, and raise it to `reasoning_effort: "xhigh"` for unusually subtle, risky, or whole-implementation reviews.
 
-Do not leave model or reasoning selection implicit. In this workflow, do not use `medium` or lower — the pure-exploration exception does not apply because these subagents are evaluating deliverables, not just exploring.
+Do not leave model or reasoning selection implicit. In this workflow, do not use `medium` or lower - these subagents are evaluating deliverables, not just exploring.
 
 Use the literal model string `gpt-5.4` in each `spawn_agent(...)` call so the workflow is consistent and reproducible.
 
@@ -109,11 +111,11 @@ Use the literal model string `gpt-5.4` in each `spawn_agent(...)` call so the wo
 Codex reviewer subagents cannot stream partial progress back to the parent while they are still running. The parent only receives the normal subagent response after that subagent stops.
 
 Work around this with shared progress files:
-- Before dispatch, create one unique progress file path per subagent.
-- Pass that path in the subagent prompt.
-- Tell the subagent to append short checkpoints when it starts, finishes a major milestone, gets blocked, or is about to hand back control.
-- Inspect that file from the main session while the subagent keeps running.
-- Treat the file as advisory status. The subagent's final response is still the authoritative result.
+- Before dispatch, create one unique progress file path per subagent
+- Pass that path in the subagent prompt
+- Tell the subagent to append short checkpoints when it starts, finishes a major milestone, gets blocked, or is about to hand back control
+- Inspect that file from the main session while the subagent keeps running
+- Treat the file as advisory status. The subagent's final response is still the authoritative result
 
 Never have multiple subagents write to the same progress file.
 
@@ -123,6 +125,7 @@ For each task, the main agent should:
 - Re-read the extracted task text and scene-setting context before coding
 - Ask the human for clarification before coding if requirements, assumptions, or dependencies are unclear
 - Implement exactly what the task specifies
+- Treat placeholders and demonstration snippets in the plan as guidance, not copy-paste instructions
 - Write or update the verification the task calls for; use TDD only when the task provides a real failing-test seam
 - Run the relevant verification before dispatching reviewers
 - Work carefully in large or tangled files and note concerns instead of quietly broadening scope
@@ -149,6 +152,7 @@ Before dispatching either reviewer, inspect the work with fresh eyes.
 **Discipline:**
 - Did I avoid overbuilding?
 - Did I stay inside the task's scope?
+- Did I avoid treating illustrative plan code as literal implementation requirements?
 
 **Testing:**
 - Did I use the testing strategy the plan called for?
@@ -157,7 +161,7 @@ Before dispatching either reviewer, inspect the work with fresh eyes.
 
 ## Prompt Templates
 
-- `./spec-reviewer-prompt.md` - Dispatch spec compliance reviewer subagent
+- `./spec-reviewer-prompt.md` - Dispatch requirements-compliance reviewer subagent for task text extracted from the plan
 - `./code-quality-reviewer-prompt.md` - Dispatch code quality reviewer subagent
 
 ## Example Workflow
@@ -178,10 +182,10 @@ You: "User level (~/.config/superpowers/hooks/)"
 [Run tests, 5/5 passing]
 [Self-review: notice --force flag is missing, add it before review]
 
-[Dispatch spec compliance reviewer]
-[Create progress file: .codex/progress/task-1-spec-review.md]
+[Dispatch requirements reviewer]
+[Create progress file: .codex/progress/task-1-requirements-review.md]
 [Inspect progress file while reviewer runs]
-Spec reviewer: ✅ Spec compliant - all requirements met, nothing extra
+Requirements reviewer: ✅ Requirements compliant - all requested behavior is present and nothing extra was added
 
 [Prepare task diff range, dispatch code quality reviewer]
 [Create progress file: .codex/progress/task-1-code-review.md]
@@ -197,16 +201,16 @@ Task 2: Recovery modes
 [Run tests, 8/8 passing]
 [Self-review says all good]
 
-[Dispatch spec compliance reviewer]
-Spec reviewer: ❌ Issues:
-  - Missing: Progress reporting (spec says "report every 100 items")
+[Dispatch requirements reviewer]
+Requirements reviewer: ❌ Issues:
+  - Missing: Progress reporting (task says "report every 100 items")
   - Extra: Added --json flag (not requested)
 
 [Fix issues in main session]
 [Remove --json flag, add progress reporting]
 
-[Spec reviewer reviews again]
-Spec reviewer: ✅ Spec compliant now
+[Requirements reviewer reviews again]
+Requirements reviewer: ✅ Requirements compliant now
 
 [Dispatch code quality reviewer]
 Code reviewer: Strengths: Solid. Issues (Important): Magic number (100)
@@ -250,9 +254,9 @@ Final reviewer: All requirements met
 
 **Quality gates:**
 - Self-review catches issues before handoff
-- Two-stage review: spec compliance, then code quality
+- Two-stage review: requirements compliance, then code quality
 - Review loops ensure fixes actually work
-- Spec compliance prevents over/under-building
+- Requirements compliance prevents over/under-building
 - Code quality ensures implementation is well-built
 
 **Cost:**
@@ -264,17 +268,17 @@ Final reviewer: All requirements met
 ## Red Flags
 
 **Never:**
-- Skip reviews (spec compliance OR code quality)
+- Skip reviews (requirements compliance OR code quality)
 - Proceed with unfixed issues
 - Hand routine implementation off to an implementer subagent in this workflow
 - Make reviewer subagents read the plan file when you can provide the task text directly
 - Skip scene-setting context (reviewers need to understand where task fits)
 - Assume `wait_agent` or the normal agent channel will show live partial progress
 - Reuse one progress file across multiple subagents
-- Accept "close enough" on spec compliance (spec reviewer found issues = not done)
+- Accept "close enough" on requirements compliance (reviewer found issues = not done)
 - Skip review loops (reviewer found issues = main agent fixes = review again)
 - Let self-review replace actual review (both are needed)
-- **Start code quality review before spec compliance is ✅** (wrong order)
+- **Start code quality review before requirements compliance is ✅** (wrong order)
 - Move to next task while either review has open issues
 
 **If the task is unclear:**

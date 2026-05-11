@@ -1,10 +1,10 @@
-# Plan Document Reviewer Prompt Template
+# Plan Reviewer Prompt Template
 
-Use this template when dispatching a plan document reviewer subagent.
+Use this template when dispatching a reviewer for the written plan.
 
 In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
-**Purpose:** Verify the plan is complete, matches the spec, and has proper task decomposition.
+**Purpose:** Verify the merged `plan` is coherent, complete enough to execute, and faithful to the approved design.
 
 **Dispatch after:** The complete plan is written.
 
@@ -14,28 +14,30 @@ Codex subagent dispatch:
   model: "gpt-5.4"
   reasoning_effort: "high"
   message: |
-    You are a plan document reviewer. Verify this plan is complete and ready for implementation.
+    You are a plan document reviewer. Verify this merged plan is ready for implementation.
 
     **Plan to review:** [PLAN_FILE_PATH]
-    **Spec for reference:** [SPEC_FILE_PATH]
 
     ## What to Check
 
     | Category | What to Look For |
     |----------|------------------|
-    | Completeness | TODOs, placeholders, incomplete tasks, missing steps |
-    | Spec Alignment | Plan covers spec requirements, no major scope creep |
-    | Task Decomposition | Tasks have clear boundaries, steps are actionable |
-    | Buildability | Could an engineer follow this plan without getting stuck? |
+    | Coverage | Goal, requirements, constraints, architecture, and verification are all present |
+    | Consistency | No contradictions between requirements, architecture, and tasks |
+    | Task Decomposition | Tasks are actionable, sequenced sensibly, and scoped cleanly |
+    | Placeholder Discipline | Placeholders are deliberate and bounded, not vague omissions |
+    | Demonstration Code | Any snippets are clearly illustrative and not concrete implementation code |
+    | Buildability | Could an informed implementer execute this without having to redesign the feature first? |
 
     ## Calibration
 
     **Only flag issues that would cause real problems during implementation.**
-    An implementer building the wrong thing or getting stuck is an issue.
-    Minor wording, stylistic preferences, and "nice to have" suggestions are not.
+    This workflow intentionally allows bounded placeholders and small demonstration snippets.
+    Do NOT flag those unless they hide a required decision, introduce ambiguity, or pretend to be production code.
 
-    Approve unless there are serious gaps — missing requirements from the spec,
-    contradictory steps, placeholder content, or tasks so vague they can't be acted on.
+    Approve unless there are serious gaps - missing requirements, contradictory tasks,
+    vague placeholders, or the plan smuggling in concrete implementation code where
+    execution work should happen instead.
 
     ## Progress Reporting in Codex
 
@@ -52,7 +54,7 @@ Codex subagent dispatch:
     **Status:** Approved | Issues Found
 
     **Issues (if any):**
-    - [Task X, Step Y]: [specific issue] - [why it matters for implementation]
+    - [Section or Task]: [specific issue] - [why it matters for implementation]
 
     **Recommendations (advisory, do not block approval):**
     - [suggestions for improvement]

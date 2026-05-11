@@ -49,6 +49,8 @@ Use `spawn_agent(...)` with `agent_type: "worker"` and the filled template at `c
 - `{DESCRIPTION}` - Brief summary
 - `{PROGRESS_FILE}` - Unique shared file path for in-flight review checkpoints
 
+If the plan contains placeholders or demonstration snippets, provide the reviewer the real task text and treat those examples as context, not as literal implementation requirements.
+
 **4. Inspect the progress file while review runs when you need visibility.**
 
 **5. Act on feedback:**
@@ -70,7 +72,7 @@ PROGRESS_FILE=.codex/progress/task-2-code-review.md
 
 [Dispatch reviewer subagent with filled `code-reviewer.md` template]
   WHAT_WAS_IMPLEMENTED: Verification and repair functions for conversation index
-  PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
+  PLAN_OR_REQUIREMENTS: Task 2 from the merged plan at docs/superpowers/plans/deployment-plan.md
   BASE_SHA: a7981ec
   HEAD_SHA: 3df7661
   DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types

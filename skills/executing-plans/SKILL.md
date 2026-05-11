@@ -1,13 +1,13 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+description: Use when you have a written plan and want to execute it in a separate session with review checkpoints
 ---
 
 # Executing Plans
 
 ## Overview
 
-Load plan, review critically, execute all tasks, report when complete.
+Load the merged plan, review it critically, execute the tasks, and report when complete.
 
 **Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
@@ -16,22 +16,25 @@ Load plan, review critically, execute all tasks, report when complete.
 ## The Process
 
 ### Step 1: Load and Review Plan
-1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Initialize `update_plan` tracking and proceed
+1. Read the plan file
+2. Review the goal, requirements, architecture, assumptions, tasks, and verification checkpoints
+3. Identify any placeholders or demonstration snippets that need repo confirmation during execution
+4. If concerns: raise them with your human partner before starting
+5. If no concerns: initialize `update_plan` tracking and proceed
 
 ### Step 2: Execute Tasks
 
 For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
+1. Mark it as `in_progress`
+2. Use the task intent, constraints, and verification checkpoints as the source of truth
+3. Resolve concrete file names, signatures, and implementation details in the codebase while staying within the plan's scope
+4. Treat any plan code block as illustrative only - do not copy it blindly
+5. Run the verifications the plan calls for
+6. Mark the task as completed
 
 ### Step 3: Complete Development
 
-After all tasks complete and verified:
+After all tasks complete and verify:
 - Report implementation complete
 - Summarize the verification that passed
 
@@ -39,8 +42,8 @@ After all tasks complete and verified:
 
 **STOP executing immediately when:**
 - Hit a blocker (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
+- The plan has critical gaps preventing safe execution
+- A placeholder or assumption turns out to hide a major design decision
 - Verification fails repeatedly
 
 **Ask for clarification rather than guessing.**
@@ -54,14 +57,16 @@ After all tasks complete and verified:
 **Don't force through blockers** - stop and ask.
 
 ## Remember
-- Review plan critically first
-- Follow plan steps exactly
+
+- Review the plan critically first
+- The plan is authoritative for scope, not a substitute for reading the codebase
+- Use the plan's requirements and tasks, but resolve concrete implementation details in the repo
 - Don't skip verifications
-- Reference skills when plan says to
+- Reference skills when the plan says to
 - Respect the user's established execution-style preference until they explicitly change it
 - Stop when blocked, don't guess
 
 ## Integration
 
 **Required workflow skills:**
-- **superpowers:writing-plans** - Creates the plan this skill executes
+- **superpowers:writing-plans** - Creates the merged plan this skill executes
