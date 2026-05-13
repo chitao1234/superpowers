@@ -155,12 +155,18 @@ fi
 
 echo ""
 
-# Test 9: Verify worktree requirement
-echo "Test 9: Worktree requirement..."
+# Test 9: Verify no default worktree requirement
+echo "Test 9: No default worktree requirement..."
 
-output=$(run_claude "What workflow skills are required before using subagent-driven-development? List any prerequisites or required skills." 30)
+output=$(run_claude "In subagent-driven-development, is using-git-worktrees required before implementation? Answer yes or no, then describe the real prerequisites." 30)
 
-if assert_contains "$output" "using-git-worktrees\|worktree" "Mentions worktree requirement"; then
+if assert_contains "$output" "no\|not required\|isn't required" "Says worktrees are not required"; then
+    : # pass
+else
+    exit 1
+fi
+
+if assert_contains "$output" "written plan\|have.*plan\|plan.*required" "Mentions plan prerequisite"; then
     : # pass
 else
     exit 1
@@ -168,12 +174,24 @@ fi
 
 echo ""
 
-# Test 10: Verify main branch warning
-echo "Test 10: Main branch red flag..."
+# Test 10: Verify worktrees are opt-in only
+echo "Test 10: Worktree opt-in only..."
 
-output=$(run_claude "In subagent-driven-development, is it okay to start implementation directly on the main branch?" 30)
+output=$(run_claude "In subagent-driven-development, should the agent create or switch to a git worktree before implementation if the user did not ask for one?" 30)
 
-if assert_contains "$output" "worktree\|feature.*branch\|not.*main\|never.*main\|avoid.*main\|don't.*main\|consent\|permission" "Warns against main branch"; then
+if assert_contains "$output" "do not\|should not\|no" "Says not to create a worktree by default"; then
+    : # pass
+else
+    exit 1
+fi
+
+if assert_contains "$output" "current workspace\|same workspace\|current session" "Keeps default execution in current workspace"; then
+    : # pass
+else
+    exit 1
+fi
+
+if assert_contains "$output" "only.*explicitly.*ask\|unless.*user.*ask\|if the user explicitly requests" "Allows worktrees only on explicit request"; then
     : # pass
 else
     exit 1

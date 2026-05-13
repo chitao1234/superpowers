@@ -1,6 +1,6 @@
 ---
 name: using-git-worktrees
-description: Use when starting feature work that needs isolation from current workspace or before executing implementation plans - creates isolated git worktrees with smart directory selection and safety verification
+description: Use when the user explicitly asks for a git worktree or a separate worktree-based workspace for the task
 ---
 
 # Using Git Worktrees
@@ -9,9 +9,18 @@ description: Use when starting feature work that needs isolation from current wo
 
 Git worktrees create isolated workspaces sharing the same repository, allowing work on multiple branches simultaneously without switching.
 
-**Core principle:** Systematic directory selection + safety verification = reliable isolation.
+**Core principle:** Explicit user request + systematic directory selection + safety verification = reliable isolation.
 
 **Announce at start:** "I'm using the using-git-worktrees skill to set up an isolated workspace."
+
+## Hard Gate
+
+Do NOT use this skill unless the user explicitly asked for a git worktree or a worktree-based isolated workspace.
+
+- Wanting isolation, neatness, or branch safety is not enough on its own.
+- A plan file, README note, or old workflow habit is not enough on its own.
+- Do not suggest worktrees as a default workflow step.
+- If the user did not ask for worktrees, stay in the current workspace and use the execution skill they chose.
 
 ## Directory Selection Process
 
@@ -208,10 +217,9 @@ Ready to implement auth feature
 
 ## Integration
 
-**Called by:**
-- **brainstorming** (Phase 4) - REQUIRED when design is approved and implementation follows
-- **subagent-driven-development** - REQUIRED before executing any tasks
-- **executing-plans** - REQUIRED before executing any tasks
-- Any skill needing isolated workspace
+**Opt-in usage only:**
+- Use when the user explicitly asks for a git worktree
+- Use when the user explicitly asks for a separate worktree-based workspace
+- Otherwise, do not invoke this skill from other workflows
 
 Cleanup after implementation is handled by the invoking workflow or user.

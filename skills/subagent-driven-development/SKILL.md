@@ -13,9 +13,19 @@ Execute the merged plan in the main session, with fresh reviewer subagents after
 
 The plan is authoritative for scope, sequencing, and constraints. Any code blocks inside it are illustrative only. Resolve concrete implementation details in the repo during execution.
 
+Old plan text does not override the worktree rule. If a plan says to set up a worktree but the current user did not explicitly ask for one, stay in the current workspace.
+
 Testing strategy comes from the plan: use strict TDD for tasks with a clear failing-test seam, and use lighter verification for docs, mechanical edits, or structural work that is not meaningfully test-first.
 
 This is a first-class execution path. Use it when the user chooses subagent-driven execution, or when they have already shown a strong preference for it. Keep using it unless the user explicitly asks to switch to `superpowers:executing-plans`.
+
+## Workspace Default
+
+Implement in the current workspace by default.
+
+- Do NOT create, switch to, or recommend a git worktree unless the user explicitly asked for a worktree or a worktree-based isolated workspace.
+- If the user explicitly requests worktrees, invoke `superpowers:using-git-worktrees` before implementation starts.
+- Do not smuggle worktrees in as "safer" or "cleaner" process advice when the user did not ask for them.
 
 ## When to Use
 
@@ -125,6 +135,7 @@ For each task, the main agent should:
 - Re-read the extracted task text and scene-setting context before coding
 - Ask the human for clarification before coding if requirements, assumptions, or dependencies are unclear
 - Implement exactly what the task specifies
+- Ignore stale plan instructions that require worktrees unless the user explicitly asked for them
 - Treat placeholders and demonstration snippets in the plan as guidance, not copy-paste instructions
 - Write or update the verification the task calls for; use TDD only when the task provides a real failing-test seam
 - Run the relevant verification before dispatching reviewers
@@ -251,6 +262,7 @@ Final reviewer: All requirements met
 - Reviewer subagents get complete information upfront
 - Questions surface before coding, not after review
 - Long-running reviews stay visible without forcing the reviewer to stop early
+- No default workspace migration before coding
 
 **Quality gates:**
 - Self-review catches issues before handoff

@@ -1,5 +1,17 @@
 # Superpowers Release Notes
 
+## v5.0.7 (2026-05-13)
+
+### Workflow Changes
+
+- **Execution skills no longer default to worktrees** — `subagent-driven-development` and `executing-plans` now say to work in the current workspace by default. They must not create, switch to, or recommend a git worktree unless the user explicitly asks for one.
+- **`using-git-worktrees` is now opt-in only** — the skill's trigger and integration notes now require an explicit user request for a git worktree or a worktree-based isolated workspace.
+
+### Docs and Tests
+
+- **README** — removed `using-git-worktrees` from the default workflow and clarified that it is an explicit opt-in skill.
+- **subagent-driven-development test** — replaced the old worktree-requirement expectation with checks that confirm worktrees are not required by default and are only allowed on explicit user request.
+
 ## v5.0.6 (2026-03-24)
 
 ### Inline Self-Review Replaces Subagent Review Loops
