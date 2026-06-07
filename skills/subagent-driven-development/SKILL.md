@@ -103,7 +103,7 @@ digraph process {
 
 ## Model Requirement
 
-When dispatching any subagent for this workflow in Codex, explicitly set the model name to `gpt-5.4` (latest GPT model) and set `reasoning_effort` explicitly.
+When dispatching any subagent for this workflow in Codex, explicitly set the model name to `gpt-5.5` (latest GPT model) and set `reasoning_effort` explicitly.
 
 This applies to:
 - requirements reviewer subagents
@@ -114,7 +114,7 @@ Use `reasoning_effort: "high"` by default for per-task reviewer subagents, and r
 
 Do not leave model or reasoning selection implicit. In this workflow, do not use `medium` or lower - these subagents are evaluating deliverables, not just exploring.
 
-Use the literal model string `gpt-5.4` in each `spawn_agent(...)` call so the workflow is consistent and reproducible.
+Use the literal model string `gpt-5.5` in each `spawn_agent(...)` call so the workflow is consistent and reproducible.
 
 ## Codex Progress Visibility
 

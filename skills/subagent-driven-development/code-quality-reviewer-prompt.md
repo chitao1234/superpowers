@@ -2,7 +2,7 @@
 
 Use this template when dispatching a code quality reviewer subagent.
 
-In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
+In Codex, dispatch this subagent with `model: "gpt-5.5"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
 **Purpose:** Verify implementation is well-built (clean, tested, maintainable).
 
@@ -13,7 +13,7 @@ In Codex, provide a unique `PROGRESS_FILE` placeholder to the reviewer. Reviewer
 ```
 Codex reviewer subagent:
   agent_type: "worker"
-  model: "gpt-5.4"
+  model: "gpt-5.5"
   reasoning_effort: "high"
   message: use the filled template at requesting-code-review/code-reviewer.md
 

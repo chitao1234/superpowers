@@ -2,14 +2,14 @@
 
 Use this template when dispatching a task-requirements reviewer subagent.
 
-In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
+In Codex, dispatch this subagent with `model: "gpt-5.5"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
 **Purpose:** Verify the main agent built what the task requested from the merged plan, nothing more and nothing less.
 
 ```
 Codex subagent dispatch:
   agent_type: "worker"
-  model: "gpt-5.4"
+  model: "gpt-5.5"
   reasoning_effort: "high"
   message: |
     You are reviewing whether an implementation matches its task requirements.

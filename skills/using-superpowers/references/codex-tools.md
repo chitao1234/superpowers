@@ -4,8 +4,8 @@ If a skill still contains legacy terminology, translate it to Codex using this t
 
 | Skill references | Codex equivalent |
 |-----------------|------------------|
-| `Task` tool (dispatch subagent) | `spawn_agent(model="gpt-5.4", reasoning_effort="high", ...)` (see [Named agent dispatch](#named-agent-dispatch)) |
-| Multiple `Task` calls (parallel) | Multiple `spawn_agent(model="gpt-5.4", reasoning_effort="high", ...)` calls |
+| `Task` tool (dispatch subagent) | `spawn_agent(model="gpt-5.5", reasoning_effort="high", ...)` (see [Named agent dispatch](#named-agent-dispatch)) |
+| Multiple `Task` calls (parallel) | Multiple `spawn_agent(model="gpt-5.5", reasoning_effort="high", ...)` calls |
 | Task returns result | `wait_agent` |
 | Task completes automatically | `close_agent` to free the slot when you no longer need it |
 | `TodoWrite` (task tracking) | `update_plan` |
@@ -30,7 +30,7 @@ Some older skills reference named agent types like `superpowers:code-reviewer`.
 Codex does not have a named agent registry — `spawn_agent` creates generic agents
 from built-in roles (`default`, `explorer`, `worker`).
 
-For GPT subagent dispatch in Codex, explicitly set `model="gpt-5.4"` (latest GPT model) and set `reasoning_effort` to `"high"` or `"xhigh"`.
+For GPT subagent dispatch in Codex, explicitly set `model="gpt-5.5"` (latest GPT model) and set `reasoning_effort` to `"high"` or `"xhigh"`.
 
 Use `"high"` by default and raise to `"xhigh"` for especially difficult synthesis, review, or planning work. Do not use `"medium"` or lower unless the subagent is purely exploratory, such as the built-in `explorer` role.
 
@@ -52,12 +52,12 @@ When a skill says to dispatch a named agent type:
    local prompt template like `code-quality-reviewer-prompt.md`)
 2. Read the prompt content
 3. Fill any template placeholders (`{BASE_SHA}`, `{WHAT_WAS_IMPLEMENTED}`, etc.)
-4. Spawn a `worker` agent with `model="gpt-5.4"` and `reasoning_effort="high"` (or `"xhigh"` when warranted) and the filled content as the `message`
+4. Spawn a `worker` agent with `model="gpt-5.5"` and `reasoning_effort="high"` (or `"xhigh"` when warranted) and the filled content as the `message`
 
 | Skill instruction | Codex equivalent |
 |-------------------|------------------|
-| `Task tool (superpowers:code-reviewer)` | `spawn_agent(agent_type="worker", model="gpt-5.4", reasoning_effort="high", message=...)` with `code-reviewer.md` content |
-| `Task tool (general-purpose)` with inline prompt | `spawn_agent(model="gpt-5.4", reasoning_effort="high", message=...)` with the same prompt |
+| `Task tool (superpowers:code-reviewer)` | `spawn_agent(agent_type="worker", model="gpt-5.5", reasoning_effort="high", message=...)` with `code-reviewer.md` content |
+| `Task tool (general-purpose)` with inline prompt | `spawn_agent(model="gpt-5.5", reasoning_effort="high", message=...)` with the same prompt |
 
 ### Message framing
 

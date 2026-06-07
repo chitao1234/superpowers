@@ -13,7 +13,7 @@ When you have multiple unrelated failures (different test files, different subsy
 
 **Core principle:** Dispatch one agent per independent problem domain. Let them work concurrently.
 
-**Codex requirement:** Explicitly set `model: "gpt-5.4"` for every dispatched subagent. For GPT subagents that implement, fix, review, or make decisions, also set `reasoning_effort` explicitly to `high` or `xhigh` — never `medium` or lower.
+**Codex requirement:** Explicitly set `model: "gpt-5.5"` for every dispatched subagent. For GPT subagents that implement, fix, review, or make decisions, also set `reasoning_effort` explicitly to `high` or `xhigh` — never `medium` or lower.
 
 **Exploration-only exception:** Purely exploratory/read-only subagents may use a lower setting when appropriate, such as the built-in `explorer` role, but that exception does not apply to fixers, implementers, or reviewers.
 
@@ -73,9 +73,9 @@ Each agent gets:
 ### 3. Dispatch in Parallel
 
 ```typescript
-const abortAgent = spawn_agent({ model: "gpt-5.4", reasoning_effort: "high", message: "Fix agent-tool-abort.test.ts failures. Write progress checkpoints to .codex/progress/agent-tool-abort.md while you work." })
-const batchAgent = spawn_agent({ model: "gpt-5.4", reasoning_effort: "high", message: "Fix batch-completion-behavior.test.ts failures. Write progress checkpoints to .codex/progress/batch-completion.md while you work." })
-const approvalAgent = spawn_agent({ model: "gpt-5.4", reasoning_effort: "high", message: "Fix tool-approval-race-conditions.test.ts failures. Write progress checkpoints to .codex/progress/tool-approval-race-conditions.md while you work." })
+const abortAgent = spawn_agent({ model: "gpt-5.5", reasoning_effort: "high", message: "Fix agent-tool-abort.test.ts failures. Write progress checkpoints to .codex/progress/agent-tool-abort.md while you work." })
+const batchAgent = spawn_agent({ model: "gpt-5.5", reasoning_effort: "high", message: "Fix batch-completion-behavior.test.ts failures. Write progress checkpoints to .codex/progress/batch-completion.md while you work." })
+const approvalAgent = spawn_agent({ model: "gpt-5.5", reasoning_effort: "high", message: "Fix tool-approval-race-conditions.test.ts failures. Write progress checkpoints to .codex/progress/tool-approval-race-conditions.md while you work." })
 
 wait_agent({ targets: [abortAgent.id, batchAgent.id, approvalAgent.id] })
 ```

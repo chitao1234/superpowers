@@ -2,7 +2,7 @@
 
 Use this template when dispatching a reviewer for the written plan.
 
-In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
+In Codex, dispatch this subagent with `model: "gpt-5.5"` and `reasoning_effort: "high"`. If the review is unusually subtle or high-risk, use `reasoning_effort: "xhigh"` instead, but never `medium` or lower for this reviewer.
 
 **Purpose:** Verify the merged `plan` is coherent, complete enough to execute, and faithful to the approved design.
 
@@ -11,7 +11,7 @@ In Codex, dispatch this subagent with `model: "gpt-5.4"` and `reasoning_effort: 
 ```
 Codex subagent dispatch:
   agent_type: "worker"
-  model: "gpt-5.4"
+  model: "gpt-5.5"
   reasoning_effort: "high"
   message: |
     You are a plan document reviewer. Verify this merged plan is ready for implementation.

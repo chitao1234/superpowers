@@ -7,7 +7,7 @@ description: Use when completing tasks, implementing major features, or before m
 
 Dispatch a reviewer subagent with the prompt template at `code-reviewer.md` to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation, not your session's history. This keeps the reviewer focused on the work product, not your thought process, and preserves your own context for continued work.
 
-In Codex, explicitly dispatch the reviewer with `model: "gpt-5.4"` and `reasoning_effort: "high"` by default. Raise that to `reasoning_effort: "xhigh"` for especially broad, risky, or subtle reviews. Do not use `medium` or lower for reviewer subagents.
+In Codex, explicitly dispatch the reviewer with `model: "gpt-5.5"` and `reasoning_effort: "high"` by default. Raise that to `reasoning_effort: "xhigh"` for especially broad, risky, or subtle reviews. Do not use `medium` or lower for reviewer subagents.
 
 Codex reviewer subagents also cannot stream partial progress back to the parent while they are still reviewing. If you want visibility during a long review, create a unique shared progress file, pass its path to the reviewer, and inspect that file from the main session.
 
